@@ -84,7 +84,7 @@ function Footer() {
                 </a>
             </div>
             <p className="footer__slogan">
-                Actualmente "No lo sé" se ha convertido en "No lo sé todavía"
+                Lo contrario de la guerra no es la paz, es la creación
             </p>
             <p className="footer__rights">Todos los derechos reservados</p>
         </footer>
