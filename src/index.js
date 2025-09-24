@@ -18,8 +18,8 @@ ReactDOM.render(
     <React.StrictMode>
         <Header />
         <Home />
-        <Work />
         <About />
+        <Work />
         <Skills />
         <Footer />
     </React.StrictMode>,

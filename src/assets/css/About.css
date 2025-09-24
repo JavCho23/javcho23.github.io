@@ -19,6 +19,14 @@
     width: 100%;
 }
 
+.about__current {
+    background-color: rgba(99, 102, 241, 0.06);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--title-color);
+    padding: 0.8em 1em;
+    border-radius: 10px;
+}
+
 @media (min-width: 1200px) {
     .about__container {
         display: flex;

@@ -1,4 +1,4 @@
-import homeDraw from "../assets/img/home-draw.png"
+import homeDraw from "../assets/img/new-home-draw.png"
 import logo from "../assets/svg/logo.svg"
 import twitter from "../assets/svg/social/twitter.svg"
 import github from "../assets/svg/social/github.svg"
@@ -52,8 +52,10 @@ function Home() {
                     </a>
                 </div>
             </div>
-            <a className="home__footer" href="#work">
-                <span> Mira mi trabajo</span>
+            <a className="home__footer" href="#about">
+                <span> 
+                    Conóceme más
+                </span>
                 <img className="home__arrow" src={arrow} alt="" />
             </a>
         </section>
