@@ -12,7 +12,7 @@ function About() {
                 <div className="about__content">
                     <span className="about__title title">Sobre mí</span>
                     <p className="about__description about__current">
-                        Actualmente estoy trabajando como{" "}
+                        Actualmente estoy trabajando con{" "}
                         <a
                             href="https://www.alegra.com/"
                             className="about__link"
