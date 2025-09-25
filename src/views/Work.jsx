@@ -10,19 +10,34 @@ import ScrollMagic from "scrollmagic"
 const works = [
     {
         img: "./assets/img/work/inbox.png",
-        name: "Inbox",
-        link: "https://www.securitec.pe/inbox/",
+        name: "Alegra",
+        link: "https://alegra.com",
         descriptions: [
             <p className="work__description">
-                Inbox es una plataforma <strong>omnicanal</strong>, que facilita
+                Alegra es una startup que ofrece distintas soluciones a las empresas para potenciar su crecimiento, les damos superpoderes.
+            </p>,
+            <p className="work__description">
+                Actualmente <strong>pertenezco</strong> al equipo de ingeniería de Alegra, como <strong>Engineering Manager</strong> liderando a los equipos de desarrollo de los productos adicionales a la plataforma principal.
+            </p>,
+            <p className="work__description">
+                El <strong>stack</strong> con el que trabajo en Alegra, es principalmente JavaScript, construyendo microservicios orientados a eventos con servicios de AWS como Lambda, SQS, SNS, etc.
+            </p>,
+        ],
+    },
+    {
+        img: "./assets/img/work/inbox.png",
+        name: "Ticker",
+        link: "https://beexcc.com/conversations-v2",
+        descriptions: [
+            <p className="work__description">
+                Ticker (ex Inbox) es una plataforma <strong>omnicanal</strong>, que facilita
                 la comunicación entre empresas y sus clientes.
             </p>,
             <p className="work__description">
-                Actualmente <strong>pertenezco</strong> al equipo de Inbox, y
-                estamos convirtiéndolo en una plataforma automantenible.
+                Ayudé a construir funcionalidades de chatbot y de cobro de suscripciones, para que funcione como un SASS self service.
             </p>,
             <p className="work__description">
-                El <strong>stack</strong> con el que trabajo en Inbox es Vue.js,
+                El <strong>stack</strong> con el que trabajé en Ticker es Vue.js,
                 Adonis.js, MongoDB, Socket.io y Express.js.
             </p>,
         ],

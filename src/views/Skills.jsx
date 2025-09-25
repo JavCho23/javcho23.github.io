@@ -7,35 +7,16 @@ import ScrollMagic from "scrollmagic"
 
 const skills = [
     {
-        img: "./assets/svg/techs/php.svg",
-        name: "Backend",
-        descriptions: [
-            {
-                text:
-                    "Mi camino siendo un backend developer empezó con PHP y desde entonces me especializado en trabajar en el lado del servidor. En los primeros proyectos trabajé principalmente con vanilla PHP, luego empecé a usar Laravel y Slim para cuando necesitaba desarrollar solo una API Rest.",
-            },
-            {
-                class: "skills__optional",
-                text:
-                    "Me he encargado de mantener una buena arquitectura para los proyectos en los que he trabajado, manteniendo mi código lo más limpio posible y crear productos de calidad.",
-            },
-            {
-                text:
-                    "Actualmente estoy aprendiendo JavaScript a fondo, usando Node.js como entorno y Adonis.js como framework.",
-            },
-        ],
-    },
-    {
         img: "./assets/svg/techs/js.svg",
-        name: "Web development",
+        name: "Fullstack development",
         descriptions: [
             {
                 text:
-                    "Actualmente estoy desarrollando mis habilidades como frontend developer, profundizando mis conocimientos de CSS y JavaScript para el frontend. La mayoría de aplicaciones web que he construido han sido con Vanilla JS y Vue.js.",
+                    "Actualmente tengo conocimientos avanzados para el frontend y backend, especialmente en JavaScript.",
             },
             {
                 text:
-                    "Tambien estoy aprendiendo React.js y construí esta página usándolo.",
+                    "Me especializo en construir microservicios orientados a eventos y que soporten un trafico alto, habiendome enfrentado a grandes desafios en el manejo de trafico y alta disponibilidad.",
             },
         ],
     },
@@ -49,7 +30,7 @@ const skills = [
             },
             {
                 text:
-                    "Actualmente estoy trabajando con una base de datos no relacional, MongoDB, y el poder que tiene para la gran demanda de datos que tiene la aplicación junto con su rápido desarrollo me han fascinado.",
+                    "Tengo conocimientos para administrar bases de datos relacionales como MySql y no relacionales como MongoDB, su autoescalado y alta disponibilidad.",
             },
         ],
     },
@@ -60,6 +41,10 @@ const skills = [
             {
                 text:
                     "La infraestructura a demanda, y auto-escalable es el futuro, y decidí aprender a administrarla. He desarrollado microservicios con una infraestructura serveless usando Lambda, APIGateway y CloudFormation, Teniendo así más tiempo para mejorar la calidad de mi código.",
+            },
+            {
+                text:
+                    "Soy un Asociate Cloud Solutions Architect certificado por AWS, y tengo más de 4 años de experiencia en el manejo de infraestructura como codigo y el uso de servicios de AWS.",
             },
         ],
     },
