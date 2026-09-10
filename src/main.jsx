@@ -1,5 +1,5 @@
 import React from "react"
-import ReactDOM from "react-dom"
+import ReactDOM from "react-dom/client"
 import "./assets/css/index.css"
 import Header from "./components/Header"
 import Home from "./views/Home"
@@ -14,7 +14,7 @@ import ScrollMagic from "scrollmagic"
 import { ScrollMagicPluginGsap } from "scrollmagic-plugin-gsap"
 
 ScrollMagicPluginGsap(ScrollMagic, TweenMax, TimelineMax)
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <Header />
         <Home />
@@ -22,8 +22,7 @@ ReactDOM.render(
         <Work />
         <Skills />
         <Footer />
-    </React.StrictMode>,
-    document.getElementById("root")
+    </React.StrictMode>
 )
 
 // If you want to start measuring performance in your app, pass a function
