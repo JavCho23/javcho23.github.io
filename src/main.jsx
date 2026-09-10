@@ -18,10 +18,12 @@ ScrollMagicPluginGsap(ScrollMagic, TweenMax, TimelineMax)
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <Header />
-        <Home />
-        <About />
-        <Work />
-        <Skills />
+        <main>
+            <Home />
+            <About />
+            <Work />
+            <Skills />
+        </main>
         <Footer />
         <Analytics />
     </React.StrictMode>

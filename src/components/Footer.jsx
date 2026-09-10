@@ -23,6 +23,7 @@ function Footer() {
                     href="https://twitter.com/javcho23"
                     target="_blank"
                     rel="noreferrer"
+                    aria-label="Twitter"
                 >
                     <svg
                         className="footer__social-media-item"
@@ -39,6 +40,7 @@ function Footer() {
                     href="https://linkedin.com/in/javcho23"
                     target="_blank"
                     rel="noreferrer"
+                    aria-label="LinkedIn"
                 >
                     <svg
                         className="footer__social-media-item"
@@ -62,6 +64,7 @@ function Footer() {
                     href="https://github.com/javcho23"
                     target="_blank"
                     rel="noreferrer"
+                    aria-label="GitHub"
                 >
                     <svg
                         className="footer__social-media-item"
