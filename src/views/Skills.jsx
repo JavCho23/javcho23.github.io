@@ -74,7 +74,7 @@ class Skills extends React.Component {
     render() {
         return (
             <section id="skills" className="skill view">
-                <h2 className="subtitle">Mis habilid</h2>
+                <h2 className="subtitle">Mis habilidades</h2>
 
                 <div className="skills">
                     <div
@@ -88,7 +88,8 @@ class Skills extends React.Component {
                                     <img
                                         className="skill__image"
                                         src={skill.img}
-                                        alt=""
+                                        alt={skill.name}
+                                        loading="lazy"
                                     />
                                     <article className="skill__details">
                                         <header className="skill__header">

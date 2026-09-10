@@ -1,13 +1,18 @@
 import "../assets/css/About.css"
 import "../assets/css/View.css"
-import me from "../assets/img/me-2025.png"
+import me from "../assets/img/me-2025.webp"
 function About() {
     return (
         <section id="about" className="about view">
             <h2 className="subtitle">Sobre mí</h2>
             <article className="about__container">
                 <header className="about__header">
-                    <img className="about__image" src={me} alt="" />
+                    <img
+                        className="about__image"
+                        src={me}
+                        alt="Javier Chávez"
+                        loading="lazy"
+                    />
                 </header>
                 <div className="about__content">
                     <span className="about__title title">Sobre mí</span>

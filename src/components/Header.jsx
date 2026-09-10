@@ -16,12 +16,7 @@ function Header() {
                 <a href="#work" className="header__item">
                     Trabajo
                 </a>
-                <a
-                    href="https://t.me/javcho23"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="header__item"
-                >
+                <a href="mailto:me@javcho.com" className="header__item">
                     Contacto
                 </a>
             </div>

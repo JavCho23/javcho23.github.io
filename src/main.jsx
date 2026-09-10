@@ -1,5 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
+import { Analytics } from "@vercel/analytics/react"
 import "./assets/css/index.css"
 import Header from "./components/Header"
 import Home from "./views/Home"
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Work />
         <Skills />
         <Footer />
+        <Analytics />
     </React.StrictMode>
 )
 
