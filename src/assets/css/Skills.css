@@ -1,76 +1,95 @@
 .skill {
     padding-top: 6em;
 }
+
 .skills {
     width: 100%;
+    max-width: 60em;
+    margin-top: 2.5em;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.2em;
 }
 
-.skills__container {
-    display: flex;
-}
-.skill__container {
-    display: flex;
-    justify-content: center;
-    float: left;
-    width: 100vw;
+.skill__card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 1.8em;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.skill__item {
+.skill__card:hover {
+    border-color: rgba(76, 110, 245, 0.4);
+    box-shadow: var(--shadow-md), 0 0 0 1px rgba(76, 110, 245, 0.15);
+}
+
+.skill__watermark {
+    position: absolute;
+    top: -1.5em;
+    right: -1.5em;
+    width: 7em;
+    height: 7em;
+    opacity: 0.06;
+    pointer-events: none;
+}
+
+.skill__icon-wrap {
+    position: relative;
+    width: 3.6em;
+    height: 3.6em;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--surface-color-alt), var(--surface-color));
+    border: 1px solid var(--border-color);
     display: flex;
-    flex-direction: column;
     align-items: center;
-    width: 80%;
+    justify-content: center;
+    margin-bottom: 1em;
+    animation: skill-float 3.6s ease-in-out infinite;
+    animation-delay: var(--float-delay, 0s);
 }
 
 .skill__image {
-    max-width: 80%;
-    height: 35vh;
+    width: 1.8em;
+    height: 1.8em;
+}
+
+@keyframes skill-float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-0.35em);
+    }
 }
 
 .skill__title {
-    margin-top: 0em;
-    margin-bottom: 0.5em;
+    color: var(--important-text-color);
+    font-size: 1.2em;
+    font-weight: 700;
+    margin: 0 0 0.6em 0;
+    position: relative;
 }
-.skill__subtitle {
-    color: var(--title-color);
-    font-weight: 200;
-    font-size: 1.5em;
+
+.skill__description {
+    color: var(--muted-text-color);
+    font-size: 0.9em;
+    position: relative;
 }
-.skills__optional {
-    display: none;
-}
-@media (min-width: 630px) {
-    .skill__subtitle {
-        font-size: 1.8em;
-    }
-    .skills__optional {
-        display: initial;
+
+@media (min-width: 900px) {
+    .skills {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
-@media (min-width: 1200px) {
-    .skill__item {
-        flex-direction: row;
-        width: 90%;
-        justify-content: space-around;
-    }
-    .skill__image {
-        width: 40%;
-        height: auto;
-    }
-    .skill__details {
-        width: 40%;
-    }
-    .skill__description {
-        width: 90%;
-    }
-    .skill__subtitle {
-        font-size: 2em;
-    }
-    .skills {
-        justify-content: center;
-    }
-    .skill__container {
-        height: 70vh;
+@media (prefers-reduced-motion: reduce) {
+    .skill__icon-wrap {
+        animation: none;
     }
 }

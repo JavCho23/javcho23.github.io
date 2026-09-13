@@ -3,26 +3,31 @@ import ReactDOM from "react-dom/client"
 import { Analytics } from "@vercel/analytics/react"
 import "./assets/css/index.css"
 import Header from "./components/Header"
+import ScrollProgress from "./components/ScrollProgress"
+import GlobalParticles from "./components/GlobalParticles"
 import Home from "./views/Home"
+import Services from "./views/Services"
+import Process from "./views/Process"
 import Work from "./views/Work"
 import About from "./views/About"
 import Skills from "./views/Skills"
+import Contact from "./views/Contact"
 import Footer from "./components/Footer"
 import reportWebVitals from "./reportWebVitals"
 
-import { TimelineMax, TweenMax } from "gsap"
-import ScrollMagic from "scrollmagic"
-import { ScrollMagicPluginGsap } from "scrollmagic-plugin-gsap"
-
-ScrollMagicPluginGsap(ScrollMagic, TweenMax, TimelineMax)
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
+        <GlobalParticles />
+        <ScrollProgress />
         <Header />
         <main>
             <Home />
-            <About />
+            <Services />
+            <Process />
             <Work />
             <Skills />
+            <About />
+            <Contact />
         </main>
         <Footer />
         <Analytics />

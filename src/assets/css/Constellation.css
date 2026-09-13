@@ -1,0 +1,503 @@
+/* Scroll-driven constellation: the wrapper is tall (one "step" of scroll per
+   star) and the stage sticks to the middle of the viewport while the user
+   scrolls through it. Progress through the wrapper picks the active star. */
+.constellation {
+    --stage-h: 60vh;
+    --step-scroll: 45vh;
+    --focus-zoom: 1;
+    display: block;
+    width: 100%;
+    max-width: 60em;
+    margin-top: 2em;
+    height: calc(var(--stage-h) + var(--steps, 1) * var(--step-scroll));
+}
+
+.constellation--line {
+    --stage-h: 42vh;
+    --step-scroll: 40vh;
+}
+
+.constellation__sticky {
+    position: sticky;
+    top: max(5.5em, calc((100vh - var(--stage-h)) / 2));
+    height: var(--stage-h);
+    width: 100%;
+}
+
+/* The camera leans in: the whole group pans toward the active star and
+   zooms in slightly, so each star "takes over" the stage in turn. */
+.constellation__stage {
+    position: absolute;
+    inset: 0;
+    transform: translate(
+            calc((50 - var(--focus-x, 50)) * 0.28%),
+            calc((50 - var(--focus-y, 50)) * 0.28%)
+        )
+        scale(var(--focus-zoom));
+    transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.constellation.has-active {
+    --focus-zoom: 1.06;
+}
+
+.constellation__lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.2s ease 0.4s;
+}
+
+.constellation.is-entered .constellation__lines {
+    opacity: 0.5;
+}
+
+.constellation__burst {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.constellation__star {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--muted-text-color);
+    font: inherit;
+    opacity: 0;
+    scale: 0.4;
+    z-index: 1;
+}
+
+.constellation__star.is-active {
+    z-index: 2;
+}
+
+.constellation.is-entered .constellation__star {
+    animation: star-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--index, 0) * 0.09s);
+}
+
+/* Slow particle-like wander, independent from the scroll parallax. Dimming
+   lives here (not on the button) because the entrance animation owns the
+   button's opacity. */
+.constellation__star-body {
+    position: relative;
+    display: block;
+    animation: star-drift var(--drift-dur, 8s) ease-in-out infinite;
+    animation-delay: calc(var(--index, 0) * -1.7s);
+    transition: opacity 0.5s ease, scale 0.5s ease;
+}
+
+.constellation.has-active .constellation__star:not(.is-active) .constellation__star-body {
+    opacity: 0.4;
+    scale: 0.88;
+}
+
+.constellation__star-core {
+    width: 3.4em;
+    height: 3.4em;
+    border-radius: 50%;
+    background: var(--surface-color-alt);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-color);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.4s ease, background 0.4s ease, color 0.4s ease;
+    animation: star-twinkle 3.4s ease-in-out infinite;
+    animation-delay: var(--star-delay, 0s);
+}
+
+.constellation__star-icon {
+    width: 1.4em;
+    height: 1.4em;
+}
+
+.constellation__star-text {
+    position: absolute;
+    top: calc(100% + 0.6em);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4em;
+    text-align: center;
+    pointer-events: none;
+    transition: width 0.4s ease, top 0.4s ease, bottom 0.4s ease;
+}
+
+.constellation__star--left .constellation__star-text {
+    left: 0;
+    transform: none;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.constellation__star--right .constellation__star-text {
+    left: auto;
+    right: 0;
+    transform: none;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.constellation__star--up .constellation__star-text {
+    top: auto;
+    bottom: calc(100% + 0.6em);
+    flex-direction: column-reverse;
+}
+
+.constellation__star-label {
+    font-size: 0.75em;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--muted-text-color);
+    transition: color 0.3s ease, opacity 0.25s ease;
+}
+
+.constellation__star:hover .constellation__star-label {
+    color: var(--important-text-color);
+}
+
+/* ---- Copy choreography ------------------------------------------------
+   Kicker line draws in, title words rise out of a mask one by one, then the
+   description and the tags follow. Runs whenever the block is shown. */
+.constellation__copy {
+    display: none;
+    flex-direction: column;
+    align-items: inherit;
+    gap: 0.55em;
+}
+
+.constellation__copy-kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    font-size: 0.7em;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--primary-color);
+}
+
+.constellation__copy-kicker::before {
+    content: "";
+    width: 2.2em;
+    height: 1px;
+    background: var(--primary-color);
+    transform-origin: left center;
+    animation: line-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.constellation__copy-title {
+    font-size: 1.5em;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--important-text-color);
+}
+
+.constellation__word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.08em;
+    margin-right: 0.28em;
+}
+
+.constellation__word:last-child {
+    margin-right: 0;
+}
+
+.constellation__word > span {
+    display: inline-block;
+    translate: 0 115%;
+    animation: word-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(60ms + var(--w, 0) * 55ms);
+}
+
+.constellation__copy-description {
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: var(--text-color);
+    opacity: 0;
+    animation: fade-up 0.55s ease both;
+    animation-delay: calc(180ms + var(--words, 1) * 55ms);
+}
+
+.constellation__copy-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    margin-top: 0.2em;
+}
+
+.constellation__tag {
+    font-size: 0.7em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.35em 0.8em;
+    border-radius: 999px;
+    border: 1px solid rgba(76, 110, 245, 0.45);
+    background: rgba(76, 110, 245, 0.12);
+    color: var(--secondary-color);
+    opacity: 0;
+    animation: fade-up 0.45s ease both;
+    animation-delay: calc(320ms + var(--words, 1) * 55ms + var(--t, 0) * 70ms);
+}
+
+.constellation__star--right .constellation__copy-kicker {
+    flex-direction: row-reverse;
+}
+
+.constellation__star--right .constellation__copy-kicker::before {
+    transform-origin: right center;
+}
+
+.constellation__star--right .constellation__copy-tags {
+    justify-content: flex-end;
+}
+
+.constellation__star:not(.constellation__star--left):not(.constellation__star--right)
+    .constellation__copy-kicker::before {
+    display: none;
+}
+
+.constellation__star:not(.constellation__star--left):not(.constellation__star--right)
+    .constellation__copy-tags {
+    justify-content: center;
+}
+
+.constellation__star:hover .constellation__star-core,
+.constellation__star:focus-visible .constellation__star-core,
+.constellation__star.is-active .constellation__star-core {
+    transform: scale(1.7);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-deep));
+    color: #ffffff;
+    box-shadow: 0 0 0 10px rgba(76, 110, 245, 0.14), 0 0 40px rgba(76, 110, 245, 0.55);
+    animation-play-state: paused;
+}
+
+.constellation__star.is-active .constellation__star-text {
+    top: calc(100% + 1.8em);
+    width: 21em;
+}
+
+.constellation__star--up.is-active .constellation__star-text {
+    top: auto;
+    bottom: calc(100% + 1.8em);
+}
+
+.constellation__star.is-active .constellation__star-label {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.constellation__star.is-active .constellation__copy {
+    display: flex;
+}
+
+.constellation__star:focus-visible {
+    outline: none;
+}
+
+.constellation__star:focus-visible .constellation__star-core {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 4px;
+}
+
+/* Big centered text used on compact screens, where there is no room next
+   to the stars. Keyed on the active index so it re-animates every change. */
+.constellation__focus {
+    display: none;
+    position: absolute;
+    left: 0.5em;
+    right: 0.5em;
+    top: 50%;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.6em;
+    animation: focus-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.constellation__focus .constellation__copy {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    max-width: 24em;
+}
+
+.constellation__focus .constellation__copy-kicker::before {
+    display: none;
+}
+
+.constellation__focus .constellation__copy-title {
+    font-size: clamp(1.5em, 7vw, 2.1em);
+}
+
+.constellation__focus .constellation__copy-description {
+    font-size: 1em;
+    line-height: 1.55;
+}
+
+.constellation__focus .constellation__copy-tags {
+    justify-content: center;
+}
+
+@keyframes star-enter {
+    from {
+        opacity: 0;
+        scale: 0.4;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+@keyframes star-drift {
+    0%,
+    100% {
+        translate: 0 0;
+    }
+    30% {
+        translate: 4px -5px;
+    }
+    65% {
+        translate: -4px 3px;
+    }
+}
+
+@keyframes star-twinkle {
+    0%,
+    100% {
+        opacity: 0.75;
+        box-shadow: 0 0 0 0 rgba(76, 110, 245, 0);
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 16px rgba(76, 110, 245, 0.35);
+    }
+}
+
+@keyframes line-in {
+    from {
+        scale: 0 1;
+    }
+    to {
+        scale: 1 1;
+    }
+}
+
+@keyframes word-in {
+    to {
+        translate: 0 0;
+    }
+}
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        translate: 0 8px;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+@keyframes focus-in {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (max-width: 899px) {
+    .constellation {
+        --stage-h: 64vh;
+        --step-scroll: 40vh;
+        max-width: 100%;
+    }
+
+    .constellation--line {
+        --stage-h: 60vh;
+    }
+
+    .constellation__stage {
+        transform: translate(calc((50 - var(--focus-x, 50)) * 0.1%), 0)
+            scale(var(--focus-zoom));
+    }
+
+    .constellation.has-active {
+        --focus-zoom: 1.03;
+    }
+
+    .constellation__star-core {
+        width: 2.8em;
+        height: 2.8em;
+    }
+
+    .constellation__star-icon {
+        width: 1.2em;
+        height: 1.2em;
+    }
+
+    .constellation__star:hover .constellation__star-core,
+    .constellation__star.is-active .constellation__star-core {
+        transform: scale(1.4);
+    }
+
+    .constellation__star-text {
+        display: none;
+    }
+
+    .constellation__focus {
+        display: flex;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .constellation__star {
+        opacity: 1;
+        scale: 1;
+    }
+    .constellation.is-entered .constellation__star,
+    .constellation__star-body,
+    .constellation__star-core,
+    .constellation__focus,
+    .constellation__copy-kicker::before,
+    .constellation__word > span,
+    .constellation__copy-description,
+    .constellation__tag {
+        animation: none;
+    }
+    .constellation__word > span {
+        translate: 0 0;
+    }
+    .constellation__copy-description,
+    .constellation__tag {
+        opacity: 1;
+    }
+    .constellation__stage {
+        transform: none;
+        transition: none;
+    }
+}

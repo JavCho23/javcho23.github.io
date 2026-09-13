@@ -1,52 +1,90 @@
+.about {
+    padding-top: 6em;
+    overflow: hidden;
+}
+
 .about__container {
-    width: 80%;
+    width: 100%;
+    max-width: 42em;
+    text-align: center;
+    position: relative;
+    z-index: 1;
 }
 
-.about__image {
-    height: 45vh;
-}
-.about__header {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 0.5em;
-}
 .about__title {
-    width: 100%;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.6em;
 }
+
 .about__description {
-    width: 100%;
+    text-align: left;
 }
 
-.about__current {
-    background-color: rgba(99, 102, 241, 0.06);
+.about__bracket {
+    position: absolute;
+    top: 0.2em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12em;
+    font-weight: 800;
+    color: var(--important-text-color);
+    opacity: 0.04;
+    z-index: 0;
+    pointer-events: none;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.about__badge {
+    position: absolute;
+    width: 2.6em;
+    height: 2.6em;
+    padding: 0.6em;
+    box-sizing: border-box;
+    border-radius: 50%;
+    background-color: var(--surface-color-alt);
     border: 1px solid var(--border-color);
-    border-left: 4px solid var(--title-color);
-    padding: 0.8em 1em;
-    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    z-index: 1;
+    display: none;
+    animation: about-badge-float 4s ease-in-out infinite;
 }
 
-@media (min-width: 1200px) {
-    .about__container {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
+.about__badge--one {
+    top: 15%;
+    left: 8%;
+    animation-delay: 0s;
+}
+
+.about__badge--two {
+    top: 55%;
+    right: 6%;
+    animation-delay: 1.2s;
+}
+
+.about__badge--three {
+    bottom: 10%;
+    left: 14%;
+    animation-delay: 2.4s;
+}
+
+@keyframes about-badge-float {
+    0%,
+    100% {
+        transform: translateY(0);
     }
-    .about__image {
-        width: 70%;
-        height: auto;
+    50% {
+        transform: translateY(-0.6em);
     }
-    .about__header {
-        width: 50%;
+}
+
+@media (min-width: 1024px) {
+    .about__badge {
+        display: block;
     }
-    .about__content {
-        width: 40%;
-    }
-    .about__container {
-        width: 90%;
-    }
-    .about__description {
-        width: 90%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about__badge {
+        animation: none;
     }
 }

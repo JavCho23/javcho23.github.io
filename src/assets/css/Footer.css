@@ -1,16 +1,19 @@
 .footer {
-    background-color: var(--alternative-background-color);
-    color: var(--alternative-text-color);
+    background-color: var(--background-color);
+    color: var(--muted-text-color);
     height: 30vh;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: flex-start;
-    padding-left: 10vw;
+    padding-left: 8vw;
+    padding-right: 8vw;
+    box-sizing: border-box;
+    border-top: 1px solid var(--border-color);
 }
 .footer__logo,
 .footer__social-media-item {
-    fill: var(--alternative-primary-color);
+    fill: var(--secondary-color);
 }
 .footer__logo {
     height: 2.8em;
@@ -33,7 +36,7 @@
 }
 
 .footer__rights {
-    color: var(--alternative-important-text-color);
+    color: var(--muted-text-color);
     margin: 0;
 }
 

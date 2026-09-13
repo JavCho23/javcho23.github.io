@@ -2,24 +2,32 @@ import logo from "../assets/svg/logo.svg"
 
 import "../assets/css/Header.css"
 
+import { useGlow } from "../hooks/useGlow"
+
 function Header() {
+    const glowRef = useGlow()
+
     return (
         <header className="header">
             <a href="#home">
                 <img className="header__logo" src={logo} alt="{ Jav }" />
             </a>
 
-            <div className="header__items">
-                <a href="#skills" className="header__item">
-                    Habilidades
+            <nav className="header__items">
+                <a href="#services" className="header__item">
+                    Servicios
                 </a>
                 <a href="#work" className="header__item">
-                    Trabajo
+                    Proyectos
                 </a>
-                <a href="mailto:me@javcho.com" className="header__item">
-                    Contacto
+                <a href="#about" className="header__item">
+                    Sobre mí
                 </a>
-            </div>
+            </nav>
+
+            <a ref={glowRef} href="#contact" className="header__cta glow-btn">
+                Hablemos
+            </a>
         </header>
     )
 }

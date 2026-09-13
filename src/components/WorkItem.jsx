@@ -1,23 +1,49 @@
-function WorkItem({ work }) {
+import { useReveal } from "../hooks/useReveal"
+import { useTilt } from "../hooks/useTilt"
+
+const GRADIENT_VARIANTS = ["one", "two", "three", "four"]
+
+function WorkItem({ work, index }) {
+    const revealRef = useReveal(index * 0.1)
+    const tiltRef = useTilt()
+    const variant = GRADIENT_VARIANTS[index % GRADIENT_VARIANTS.length]
+
     return (
-        <div id={work.name.replace(" ", "")} className="work__container">
-            <div className="work__item">
-                <img
-                    className="work__image"
-                    src={work.img}
-                    alt={`Captura de pantalla del proyecto ${work.name}`}
-                    loading="lazy"
-                />
-                <article className="work__details">
-                    <header className="work__header">
-                        <span className="work__subtitle">Mi trabajo</span>
-                        <a href={work.link} target="_blank" rel="noreferrer">
-                            <h3 className="work__title title">{work.name}</h3>
-                        </a>
-                    </header>
-                    {work.descriptions.map((description) => description)}
+        <div ref={revealRef} className="reveal">
+            <a
+                href={work.link}
+                target={work.link === "#" ? undefined : "_blank"}
+                rel="noreferrer"
+                className="work__link"
+            >
+                <article ref={tiltRef} className="work__card tilt-card">
+                    {work.image ? (
+                        <div className="work__banner work__banner--image">
+                            <img
+                                src={work.image}
+                                alt={`Captura de pantalla del proyecto ${work.name}`}
+                                loading="lazy"
+                            />
+                        </div>
+                    ) : (
+                        <div className={`work__banner work__banner--${variant}`}>
+                            <span className="work__banner-icon">{work.icon}</span>
+                        </div>
+                    )}
+                    <div className="work__body">
+                        <header className="work__header">
+                            <span className="work__tag">{work.tag}</span>
+                            <h3 className="work__title">{work.name}</h3>
+                        </header>
+                        <p className="work__description">{work.description}</p>
+                        <ul className="work__stack">
+                            {work.stack.map((item) => (
+                                <li key={item}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
                 </article>
-            </div>
+            </a>
         </div>
     )
 }
