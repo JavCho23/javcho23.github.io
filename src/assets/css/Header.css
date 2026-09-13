@@ -19,15 +19,15 @@
 }
 
 .header__items {
-    display: none;
+    display: flex;
     align-items: center;
-    gap: 2em;
+    gap: 1em;
 }
 
 .header__item {
     font-weight: 500;
     color: var(--header-text-color);
-    font-size: 0.95em;
+    font-size: 1em;
     transition: color 0.2s ease;
 }
 
@@ -54,9 +54,6 @@
 @media (min-width: 630px) {
     .header__logo {
         width: 4em;
-    }
-    .header__items {
-        display: flex;
     }
     .header__item {
         font-size: 1em;
