@@ -20,14 +20,10 @@ function Header() {
                 <a href="#work" className="header__item">
                     Proyectos
                 </a>
-                <a href="#about" className="header__item">
-                    Sobre mí
+                <a ref={glowRef} href="#contact" className="header__cta glow-btn">
+                    Hablemos
                 </a>
             </nav>
-
-            <a ref={glowRef} href="#contact" className="header__cta glow-btn">
-                Hablemos
-            </a>
         </header>
     )
 }

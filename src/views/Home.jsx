@@ -69,7 +69,6 @@ function Home() {
             </div>
 
             <a ref={glowRef} className="home__footer glow-btn" href="#services">
-                <span>Conóceme más</span>
                 <img className="home__arrow" src={arrow} alt="" />
             </a>
         </section>

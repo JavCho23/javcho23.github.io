@@ -82,7 +82,6 @@
     z-index: 1;
     padding: 0.6em 1.4em;
     border-radius: 30px;
-    border: 1px solid var(--border-color);
     transition: border-color 0.2s ease;
     animation: bob 2.4s ease-in-out infinite;
 }
