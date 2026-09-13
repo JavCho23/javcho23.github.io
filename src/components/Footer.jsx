@@ -3,6 +3,7 @@ import "../assets/css/Footer.css"
 function Footer() {
     return (
         <footer className="footer">
+            <div className="footer__main">
             <svg
                 className="footer__logo"
                 width="244"
@@ -89,6 +90,7 @@ function Footer() {
             <p className="footer__slogan">
                 Lo contrario de la guerra no es la paz, es la creación
             </p>
+            </div>
             <p className="footer__rights">Todos los derechos reservados</p>
         </footer>
     )

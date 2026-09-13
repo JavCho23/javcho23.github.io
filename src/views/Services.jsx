@@ -23,7 +23,7 @@ const services = [
         description:
             "Conecto las herramientas que ya usas: pagos, mensajería, hojas de cálculo, ERPs.",
         x: 38,
-        y: 8,
+        y: 14,
     },
     {
         icon: Monitor,
@@ -49,8 +49,8 @@ const services = [
         title: "Sistemas internos",
         description:
             "Herramientas a medida para gestionar tu operación día a día.",
-        x: 50,
-        y: 68,
+        x: 52,
+        y: 76,
     },
 ]
 
@@ -59,35 +59,34 @@ function Services() {
 
     return (
         <section id="services" className="services view">
-            <span className="kicker">¿Cómo puedo ayudarte?</span>
-            <h2 className="title">Lo que podemos hacer juntos</h2>
-            <article className="services__intro">
-                <p className="services__roles">
-                    Engineering Manager · Software Developer · AWS Certified
-                    Cloud Solutions Architect
-                </p>
-                <p>
-                    ¿Sabías que los procesos que te quitan horas cada semana se
-                    pueden reducir hasta un <strong>99%</strong>? ¿Tu sistema ya
-                    no se ajusta a tus objetivos? Hago el diseño y desarrollo de
-                    software y de flujos de IA a medida para negocios de
-                    cualquier tamaño.
-                </p>
-            </article>
-
-            <Constellation layout="scatter" points={services} />
-
-            <div className="services__cta">
-                <a
-                    ref={glowRef}
-                    href="https://wa.me/51989912874"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="services__cta-button glow-btn"
-                >
-                    Cuéntame tu proyecto
-                </a>
-            </div>
+            <Constellation
+                layout="scatter"
+                points={services}
+                header={
+                    <>
+                        <span className="kicker">¿Cómo puedo ayudarte?</span>
+                        <h2 className="title">Lo que podemos hacer juntos</h2>
+                        <p className="services__lead">
+                            ¿Sabías que los procesos que te quitan horas cada
+                            semana se pueden reducir hasta un{" "}
+                            <strong>99%</strong>? ¿Tu sistema ya no se ajusta a
+                            tus objetivos? Diseño y desarrollo software y flujos
+                            de IA a medida para negocios de cualquier tamaño.
+                        </p>
+                    </>
+                }
+                footer={
+                    <a
+                        ref={glowRef}
+                        href="https://wa.me/51989912874"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="services__cta-button glow-btn"
+                    >
+                        Cuéntame tu proyecto
+                    </a>
+                }
+            />
         </section>
     )
 }

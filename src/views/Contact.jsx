@@ -1,6 +1,8 @@
 import "../assets/css/Contact.css"
 import "../assets/css/View.css"
 
+import { Mail } from "lucide-react"
+
 import { useReveal } from "../hooks/useReveal"
 import { useGlow } from "../hooks/useGlow"
 import ParticleField from "../components/ParticleField"
@@ -9,6 +11,7 @@ function Contact() {
     const revealRef = useReveal()
     const primaryGlowRef = useGlow()
     const secondaryGlowRef = useGlow()
+    const emailGlowRef = useGlow()
 
     return (
         <section id="contact" className="contact view">
@@ -37,6 +40,14 @@ function Contact() {
                         className="contact__cta contact__cta--secondary glow-btn"
                     >
                         LinkedIn
+                    </a>
+                    <a
+                        ref={emailGlowRef}
+                        href="mailto:me@javcho.com"
+                        className="contact__cta contact__cta--secondary glow-btn"
+                    >
+                        <Mail className="contact__cta-icon" />
+                        Correo
                     </a>
                 </div>
             </div>

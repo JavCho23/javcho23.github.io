@@ -37,10 +37,16 @@ const steps = [
 function Process() {
     return (
         <section id="process" className="process view">
-            <span className="kicker">¿Cómo trabajo?</span>
-            <h2 className="title">Entregando valor desde el día uno</h2>
-
-            <Constellation layout="line" points={steps} />
+            <Constellation
+                layout="line"
+                points={steps}
+                header={
+                    <>
+                        <span className="kicker">¿Cómo trabajo?</span>
+                        <h2 className="title">Entregando valor desde el día uno</h2>
+                    </>
+                }
+            />
         </section>
     )
 }

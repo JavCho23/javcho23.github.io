@@ -8,8 +8,9 @@ const DEPTHS = [0.6, 1.3, 0.8, 1.5, 1.0, 0.7, 1.2]
 const SIDES = [1, -1, 1, -1, 1, -1, 1]
 const DRIFT_DURATIONS = [7.5, 9, 6.5, 8.2, 7, 9.5, 6.8]
 
-// Max travel (in % of the stage) across the whole scroll range.
-const PARALLAX_Y = 14
+// Max travel (in % of the stage) across the whole scroll range. Kept small
+// so stars near the edges never drift into the header or footer slots.
+const PARALLAX_Y = 9
 const PARALLAX_X = 4
 
 const BURST_COLORS = ["76, 110, 245", "202, 220, 252", "255, 255, 255", "102, 131, 255"]
@@ -93,9 +94,10 @@ function compactLayout(points) {
     }))
 }
 
-function Constellation({ points, layout = "scatter" }) {
+function Constellation({ points, layout = "scatter", header = null, footer = null }) {
     const rootRef = useRef(null)
     const stickyRef = useRef(null)
+    const viewportRef = useRef(null)
     const canvasRef = useRef(null)
     const burstRef = useRef(null)
     const positionedRef = useRef([])
@@ -107,7 +109,6 @@ function Constellation({ points, layout = "scatter" }) {
 
     const [entered, setEntered] = useState(false)
     const [progress, setProgress] = useState(0)
-    const [hoverIndex, setHoverIndex] = useState(null)
 
     const count = points.length
     const basePoints = compact ? compactLayout(points) : points
@@ -150,7 +151,7 @@ function Constellation({ points, layout = "scatter" }) {
 
     // The first star only lights up once the stage is actually on screen.
     useEffect(() => {
-        const node = stickyRef.current
+        const node = viewportRef.current
         if (!node) return
 
         const observer = new IntersectionObserver(
@@ -244,7 +245,7 @@ function Constellation({ points, layout = "scatter" }) {
     }, [])
 
     const scrollIndex = clamp(Math.floor(progress * count), 0, count - 1)
-    const activeIndex = entered ? hoverIndex ?? scrollIndex : null
+    const activeIndex = entered ? scrollIndex : null
     const active = activeIndex !== null ? basePoints[activeIndex] : null
 
     useEffect(() => {
@@ -304,99 +305,106 @@ function Constellation({ points, layout = "scatter" }) {
             }}
         >
             <div ref={stickyRef} className="constellation__sticky">
-                <div className="constellation__stage">
-                    <svg
-                        className="constellation__lines"
-                        viewBox="0 0 100 100"
-                        preserveAspectRatio="none"
-                        aria-hidden="true"
-                    >
-                        <defs>
-                            <linearGradient
-                                id={gradientId}
-                                x1="0"
-                                y1="0"
-                                x2="100"
-                                y2="0"
-                            >
-                                <stop offset="0%" stopColor="var(--primary-color)" />
-                                <stop offset="100%" stopColor="var(--secondary-color)" />
-                            </linearGradient>
-                        </defs>
-                        <path
-                            d={linePath}
-                            fill="none"
-                            stroke={`url(#${gradientId})`}
-                            strokeWidth="0.3"
-                            strokeDasharray="1 2"
+                {header && <div className="constellation__header">{header}</div>}
+
+                <div ref={viewportRef} className="constellation__viewport">
+                    <div className="constellation__stage">
+                        <svg
+                            className="constellation__lines"
+                            viewBox="0 0 100 100"
+                            preserveAspectRatio="none"
+                            aria-hidden="true"
+                        >
+                            <defs>
+                                <linearGradient
+                                    id={gradientId}
+                                    x1="0"
+                                    y1="0"
+                                    x2="100"
+                                    y2="0"
+                                >
+                                    <stop offset="0%" stopColor="var(--primary-color)" />
+                                    <stop offset="100%" stopColor="var(--secondary-color)" />
+                                </linearGradient>
+                            </defs>
+                            <path
+                                d={linePath}
+                                fill="none"
+                                stroke={`url(#${gradientId})`}
+                                strokeWidth="0.3"
+                                strokeDasharray="1 2"
+                            />
+                        </svg>
+
+                        <canvas
+                            ref={canvasRef}
+                            className="constellation__burst"
+                            aria-hidden="true"
                         />
-                    </svg>
 
-                    <canvas
-                        ref={canvasRef}
-                        className="constellation__burst"
-                        aria-hidden="true"
-                    />
+                        {positioned.map((point, index) => {
+                            const isActive = index === activeIndex
+                            const Icon = point.icon
+                            // Stars low in the stage get their copy beside
+                            // them (toward the stage centre) instead of above,
+                            // so the text never climbs into the header slot.
+                            const low = point.y > 60
+                            const classes = [
+                                "constellation__star",
+                                !low && point.x < 25 ? "constellation__star--left" : "",
+                                !low && point.x > 75 ? "constellation__star--right" : "",
+                                low && point.x >= 50 ? "constellation__star--side-left" : "",
+                                low && point.x < 50 ? "constellation__star--side-right" : "",
+                                isActive ? "is-active" : "",
+                            ]
+                                .filter(Boolean)
+                                .join(" ")
 
-                    {positioned.map((point, index) => {
-                        const isActive = index === activeIndex
-                        const Icon = point.icon
-                        const classes = [
-                            "constellation__star",
-                            point.x < 25 ? "constellation__star--left" : "",
-                            point.x > 75 ? "constellation__star--right" : "",
-                            point.y > 60 ? "constellation__star--up" : "",
-                            isActive ? "is-active" : "",
-                        ]
-                            .filter(Boolean)
-                            .join(" ")
-
-                        return (
-                            <button
-                                key={point.title}
-                                type="button"
-                                className={classes}
-                                style={{
-                                    left: `${point.px}%`,
-                                    top: `${point.py}%`,
-                                    "--index": index,
-                                    "--star-delay": `${index * 0.5}s`,
-                                    "--drift-dur": `${
-                                        DRIFT_DURATIONS[index % DRIFT_DURATIONS.length]
-                                    }s`,
-                                }}
-                                onMouseEnter={() => setHoverIndex(index)}
-                                onMouseLeave={() => setHoverIndex(null)}
-                                onFocus={() => setHoverIndex(index)}
-                                onBlur={() => setHoverIndex(null)}
-                                onClick={() => scrollToIndex(index)}
-                                aria-current={isActive ? "true" : undefined}
-                            >
-                                <span className="constellation__star-body">
-                                    <span className="constellation__star-core">
-                                        <Icon
-                                            className="constellation__star-icon"
-                                            strokeWidth={1.75}
-                                            aria-hidden="true"
-                                        />
-                                    </span>
-                                    <span className="constellation__star-text">
-                                        <span className="constellation__star-label">
-                                            {point.title}
+                            return (
+                                <button
+                                    key={point.title}
+                                    type="button"
+                                    className={classes}
+                                    style={{
+                                        left: `${point.px}%`,
+                                        top: `${point.py}%`,
+                                        "--index": index,
+                                        "--star-delay": `${index * 0.5}s`,
+                                        "--drift-dur": `${
+                                            DRIFT_DURATIONS[index % DRIFT_DURATIONS.length]
+                                        }s`,
+                                    }}
+                                    onClick={() => scrollToIndex(index)}
+                                    aria-current={isActive ? "true" : undefined}
+                                >
+                                    <span className="constellation__star-body">
+                                        <span className="constellation__star-core">
+                                            <Icon
+                                                className="constellation__star-icon"
+                                                strokeWidth={1.75}
+                                                aria-hidden="true"
+                                            />
                                         </span>
-                                        <Copy point={point} index={index} count={count} />
+                                        <span className="constellation__star-text">
+                                            <span className="constellation__star-label">
+                                                {point.title}
+                                            </span>
+                                            <Copy point={point} index={index} count={count} />
+                                        </span>
                                     </span>
-                                </span>
-                            </button>
-                        )
-                    })}
+                                </button>
+                            )
+                        })}
 
-                    {active && (
-                        <div key={activeIndex} className="constellation__focus">
-                            <Copy point={active} index={activeIndex} count={count} />
-                        </div>
-                    )}
+                        {active && (
+                            <div key={activeIndex} className="constellation__focus">
+                                <Copy point={active} index={activeIndex} count={count} />
+                            </div>
+                        )}
+                    </div>
                 </div>
+
+                {footer && <div className="constellation__footer">{footer}</div>}
             </div>
         </div>
     )

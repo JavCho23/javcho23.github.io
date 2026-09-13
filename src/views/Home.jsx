@@ -26,6 +26,10 @@ function Home() {
 
                 <div className="home__content">
                     <img className="home__logo" src={logo} alt="{ Jav }" />
+                    <p className="home__eyebrow">
+                        Engineering Manager · Software Developer · AWS Certified
+                        Cloud Solutions Architect
+                    </p>
                     <h1 className="home__title">
                         Software que impulsa tu negocio
                     </h1>

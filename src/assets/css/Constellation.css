@@ -1,15 +1,18 @@
 /* Scroll-driven constellation: the wrapper is tall (one "step" of scroll per
-   star) and the stage sticks to the middle of the viewport while the user
-   scrolls through it. Progress through the wrapper picks the active star. */
+   star) and a viewport-sized sticky block (optional header + stage + optional
+   footer, vertically centered) rides along while the user scrolls through it.
+   Progress through the wrapper picks the active star. */
 .constellation {
-    --stage-h: 60vh;
+    --stage-h: 50vh;
     --step-scroll: 45vh;
+    --header-offset: 5.5em;
+    --sticky-h: calc(100vh - var(--header-offset));
     --focus-zoom: 1;
     display: block;
     width: 100%;
     max-width: 60em;
     margin-top: 2em;
-    height: calc(var(--stage-h) + var(--steps, 1) * var(--step-scroll));
+    height: calc(var(--sticky-h) + var(--steps, 1) * var(--step-scroll));
 }
 
 .constellation--line {
@@ -19,9 +22,44 @@
 
 .constellation__sticky {
     position: sticky;
-    top: max(5.5em, calc((100vh - var(--stage-h)) / 2));
+    top: var(--header-offset);
+    height: var(--sticky-h);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.constellation__viewport {
+    position: relative;
     height: var(--stage-h);
     width: 100%;
+    flex-shrink: 0;
+}
+
+/* Optional slots above/below the stage (section title, a CTA) so they ride
+   along with the sticky stage for the whole scroll-through. */
+.constellation__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1.25em;
+}
+
+.constellation__footer {
+    margin-top: 1.5em;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    translate: 0 12px;
+    transition: opacity 0.7s ease 0.9s, translate 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.9s;
+}
+
+.constellation.is-entered .constellation__footer {
+    opacity: 1;
+    translate: 0 0;
 }
 
 /* The camera leans in: the whole group pans toward the active star and
@@ -31,7 +69,7 @@
     inset: 0;
     transform: translate(
             calc((50 - var(--focus-x, 50)) * 0.28%),
-            calc((50 - var(--focus-y, 50)) * 0.28%)
+            calc((50 - var(--focus-y, 50)) * 0.12%)
         )
         scale(var(--focus-zoom));
     transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
@@ -153,10 +191,24 @@
     text-align: right;
 }
 
-.constellation__star--up .constellation__star-text {
-    top: auto;
-    bottom: calc(100% + 0.6em);
-    flex-direction: column-reverse;
+.constellation__star--side-left .constellation__star-text,
+.constellation__star--side-right .constellation__star-text {
+    top: 50%;
+    transform: translateY(-50%);
+    transition: width 0.4s ease, left 0.4s ease, right 0.4s ease;
+}
+
+.constellation__star--side-left .constellation__star-text {
+    left: auto;
+    right: calc(100% + 0.8em);
+    align-items: flex-end;
+    text-align: right;
+}
+
+.constellation__star--side-right .constellation__star-text {
+    left: calc(100% + 0.8em);
+    align-items: flex-start;
+    text-align: left;
 }
 
 .constellation__star-label {
@@ -257,30 +309,36 @@
     animation-delay: calc(320ms + var(--words, 1) * 55ms + var(--t, 0) * 70ms);
 }
 
-.constellation__star--right .constellation__copy-kicker {
+.constellation__star--right .constellation__copy-kicker,
+.constellation__star--side-left .constellation__copy-kicker {
     flex-direction: row-reverse;
 }
 
-.constellation__star--right .constellation__copy-kicker::before {
+.constellation__star--right .constellation__copy-kicker::before,
+.constellation__star--side-left .constellation__copy-kicker::before {
     transform-origin: right center;
 }
 
-.constellation__star--right .constellation__copy-tags {
+.constellation__star--right .constellation__copy-tags,
+.constellation__star--side-left .constellation__copy-tags {
     justify-content: flex-end;
 }
 
-.constellation__star:not(.constellation__star--left):not(.constellation__star--right)
-    .constellation__copy-kicker::before {
+.constellation__star:not([class*="constellation__star--"]) .constellation__copy-kicker::before {
     display: none;
 }
 
-.constellation__star:not(.constellation__star--left):not(.constellation__star--right)
-    .constellation__copy-tags {
+.constellation__star:not([class*="constellation__star--"]) .constellation__copy-tags {
     justify-content: center;
 }
 
 .constellation__star:hover .constellation__star-core,
-.constellation__star:focus-visible .constellation__star-core,
+.constellation__star:focus-visible .constellation__star-core {
+    transform: scale(1.12);
+    border-color: rgba(76, 110, 245, 0.6);
+    color: var(--important-text-color);
+}
+
 .constellation__star.is-active .constellation__star-core {
     transform: scale(1.7);
     background: linear-gradient(135deg, var(--primary-color), var(--primary-deep));
@@ -294,9 +352,14 @@
     width: 21em;
 }
 
-.constellation__star--up.is-active .constellation__star-text {
-    top: auto;
-    bottom: calc(100% + 1.8em);
+.constellation__star--side-left.is-active .constellation__star-text {
+    top: 50%;
+    right: calc(100% + 2em);
+}
+
+.constellation__star--side-right.is-active .constellation__star-text {
+    top: 50%;
+    left: calc(100% + 2em);
 }
 
 .constellation__star.is-active .constellation__star-label {
@@ -432,7 +495,7 @@
 
 @media (max-width: 899px) {
     .constellation {
-        --stage-h: 64vh;
+        --stage-h: 50vh;
         --step-scroll: 40vh;
         max-width: 100%;
     }
@@ -460,7 +523,6 @@
         height: 1.2em;
     }
 
-    .constellation__star:hover .constellation__star-core,
     .constellation__star.is-active .constellation__star-core {
         transform: scale(1.4);
     }
@@ -478,6 +540,11 @@
     .constellation__star {
         opacity: 1;
         scale: 1;
+    }
+    .constellation__footer {
+        opacity: 1;
+        translate: 0 0;
+        transition: none;
     }
     .constellation.is-entered .constellation__star,
     .constellation__star-body,

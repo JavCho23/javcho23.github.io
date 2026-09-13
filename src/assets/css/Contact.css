@@ -1,5 +1,7 @@
 .contact {
+    min-height: 70vh;
     padding-top: 6em;
+    padding-bottom: 2em;
     background: linear-gradient(
         160deg,
         var(--background-color) 0%,
@@ -40,12 +42,21 @@
 }
 
 .contact__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
     padding: 0.9em 1.6em;
     border-radius: 30px;
     font-weight: 700;
     font-size: 0.95em;
     transition: transform 0.2s ease, background-color 0.2s ease,
         border-color 0.2s ease;
+}
+
+.contact__cta-icon {
+    width: 1.1em;
+    height: 1.1em;
 }
 
 .contact__cta--primary {
@@ -72,5 +83,11 @@
     .contact__cta-group {
         flex-direction: row;
         justify-content: center;
+    }
+}
+
+@media (min-width: 1200px) {
+    .contact {
+        min-height: 85vh;
     }
 }

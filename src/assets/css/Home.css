@@ -32,12 +32,22 @@
     margin-bottom: 1em;
 }
 
+.home__eyebrow {
+    font-size: 0.75em;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--secondary-color);
+    margin: 0;
+    max-width: 28em;
+    text-wrap: balance;
+}
+
 .home__title {
     font-size: clamp(2em, 7vw, 3em);
     font-weight: 800;
     line-height: 1.15;
     color: var(--important-text-color);
-    margin: 0.2em 0 0.9em 0;
+    margin: 0.3em 0 0.9em 0;
 }
 
 .home__social-media {
