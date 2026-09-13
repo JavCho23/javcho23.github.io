@@ -19,6 +19,10 @@ const MAX_SPEED = 12
 const SAMPLE_SIZE = 260
 const OUTLINE_RATIO = 0.66 // % de particulas que van al contorno
 const LINK_RATIO = 0.06 // distancia de enlace relativa al tamaño de la figura
+// Desvanecimiento hacia los bordes para fundirse con el fondo
+const EDGE_FADE_RATIO = 0.22 // ancho del degradado en los bordes visibles
+const VIGNETTE_START = 0.55 // radio (relativo a la figura) donde empieza a apagarse
+const VIGNETTE_END = 0.9 // radio donde ya no se ve
 
 /* ------------------------------------------------------------------ */
 /* Siluetas. Cada una dibuja en un espacio de 0..SAMPLE_SIZE.         */
@@ -102,6 +106,11 @@ function clamp01(v) {
 
 function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3)
+}
+
+function smoothstep(a, b, v) {
+    const t = clamp01((v - a) / (b - a))
+    return t * t * (3 - 2 * t)
 }
 
 /* --- Engranajes: geometria calculada para que engranen ------------- */
@@ -495,6 +504,8 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
         let offsetX = 0
         let offsetY = 0
         let linkDistance = 0
+        // zona visible del canvas (recortada por la seccion) en coords del canvas
+        const clip = { l: 0, r: 0, t: 0, b: 0, fade: 1 }
         let particles = []
         let targets = []
         let shapeIndex = 0
@@ -502,6 +513,7 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
         let phaseStart = 0
         let shapeStart = 0
         let animationId = null
+        let lastFrame = 0
         let isVisible = false
         const mouse = { x: -9999, y: -9999 }
 
@@ -539,6 +551,7 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
                     vx: 0,
                     vy: 0,
                     speed: 0,
+                    fade: 1,
                     r: 0.8 + Math.random() * 1.4,
                     color: PALETTE[i % PALETTE.length],
                     jitter: Math.random() * Math.PI * 2,
@@ -558,8 +571,22 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
             shapeIndex = index
             targets = buildTargets(SHAPES[shapeIndex], particles.length)
             shapeStart = now
+            updateClip()
             canvas.dataset.shape = SHAPES[shapeIndex].name
             setPhase("gather", now)
+        }
+
+        // la seccion tiene overflow hidden: lo que quede fuera se corta,
+        // asi que desvanecemos antes de llegar a ese borde
+        const updateClip = () => {
+            const section = canvas.closest("section") || document.body
+            const sRect = section.getBoundingClientRect()
+            const cRect = canvas.getBoundingClientRect()
+            clip.l = Math.max(0, sRect.left - cRect.left)
+            clip.r = Math.min(width, sRect.right - cRect.left)
+            clip.t = Math.max(0, sRect.top - cRect.top)
+            clip.b = Math.min(height, sRect.bottom - cRect.top)
+            clip.fade = Math.max(1, scale * EDGE_FADE_RATIO)
         }
 
         const resize = () => {
@@ -573,6 +600,8 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
             offsetX = (width - scale) / 2
             offsetY = (height - scale) / 2
             linkDistance = scale * LINK_RATIO
+
+            updateClip()
 
             cellSize = Math.max(8, linkDistance)
             cols = Math.ceil(width / cellSize) + 1
@@ -614,6 +643,14 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
             }
         }
 
+        const fadeAt = (x, y) => {
+            const edge = Math.min(x - clip.l, clip.r - x, y - clip.t, clip.b - y)
+            const edgeFade = clamp01(edge / clip.fade)
+            const r = Math.hypot(x - width / 2, y - height / 2) / scale
+            const vignette = 1 - smoothstep(VIGNETTE_START, VIGNETTE_END, r)
+            return edgeFade * vignette
+        }
+
         const drawGlow = (intensity) => {
             const cx = width / 2
             const cy = height / 2
@@ -631,8 +668,12 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
         // Se agrupan por opacidad en pocos trazos para no llamar stroke()
         // miles de veces por frame.
         const LINK_BUCKETS = 5
+        const FADE_BUCKETS = 3
         const MAX_LINKS = 4
-        const linkPaths = Array.from({ length: LINK_BUCKETS }, () => new Path2D())
+        const linkPaths = Array.from(
+            { length: LINK_BUCKETS * FADE_BUCKETS },
+            () => new Path2D()
+        )
 
         const drawLinks = (alphaScale) => {
             heads.fill(-1)
@@ -649,13 +690,14 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
                 heads[cell] = i
             }
 
-            for (let b = 0; b < LINK_BUCKETS; b++) linkPaths[b] = new Path2D()
+            for (let b = 0; b < linkPaths.length; b++) linkPaths[b] = new Path2D()
             linkCount.fill(0)
 
             const maxDist2 = linkDistance * linkDistance
             for (let i = 0; i < particles.length; i++) {
                 if (next[i] === -2 || linkCount[i] >= MAX_LINKS) continue
                 const p = particles[i]
+                if (p.fade < 0.05) continue
                 const cx = Math.floor(p.x / cellSize)
                 const cy = Math.floor(p.y / cellSize)
                 for (let oy = 0; oy <= 1; oy++) {
@@ -673,10 +715,15 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
                                 const dy = p.y - q.y
                                 const d2 = dx * dx + dy * dy
                                 if (d2 < maxDist2) {
-                                    const bucket = Math.min(
+                                    const distBucket = Math.min(
                                         LINK_BUCKETS - 1,
                                         Math.floor((1 - Math.sqrt(d2) / linkDistance) * LINK_BUCKETS)
                                     )
+                                    const fadeBucket = Math.min(
+                                        FADE_BUCKETS - 1,
+                                        Math.floor(Math.min(p.fade, q.fade) * FADE_BUCKETS)
+                                    )
+                                    const bucket = fadeBucket * LINK_BUCKETS + distBucket
                                     linkPaths[bucket].moveTo(p.x, p.y)
                                     linkPaths[bucket].lineTo(q.x, q.y)
                                     linkCount[i]++
@@ -693,15 +740,23 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
             }
 
             ctx.lineWidth = 1
-            for (let b = 0; b < LINK_BUCKETS; b++) {
-                const alpha = 0.18 * alphaScale * ((b + 0.5) / LINK_BUCKETS)
-                ctx.strokeStyle = `rgba(202, 220, 252, ${alpha})`
-                ctx.stroke(linkPaths[b])
+            for (let f = 0; f < FADE_BUCKETS; f++) {
+                for (let b = 0; b < LINK_BUCKETS; b++) {
+                    const alpha =
+                        0.18 * alphaScale * ((b + 0.5) / LINK_BUCKETS) * ((f + 0.5) / FADE_BUCKETS)
+                    ctx.strokeStyle = `rgba(202, 220, 252, ${alpha})`
+                    ctx.stroke(linkPaths[f * LINK_BUCKETS + b])
+                }
             }
         }
 
         const renderFrame = (now) => {
             ctx.clearRect(0, 0, width, height)
+
+            // factor de tiempo relativo a 60fps para que la fisica no dependa
+            // de la tasa de refresco (120Hz, pestañas lentas, etc.)
+            const dt = lastFrame ? Math.min(3, Math.max(0.25, (now - lastFrame) / 16.667)) : 1
+            lastFrame = now
 
             const shape = SHAPES[shapeIndex]
             const elapsed = now - phaseStart
@@ -728,6 +783,8 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
             const formed = phase !== "scatter"
             // factor de interpolacion hacia el objetivo: arranca suave y termina firme
             const follow = phase === "gather" ? 0.025 + gatherProgress * 0.13 : 0.16
+            const followDt = (1 - Math.pow(1 - follow, dt)) / dt
+            const drag = Math.pow(0.968, dt)
             const info = {
                 phase,
                 shapeElapsed: now - shapeStart,
@@ -749,16 +806,16 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
                     const ty =
                         offsetY + (t.y + Math.cos(now / 700 + p.jitter) * wobble) * scale
 
-                    p.vx = (tx - p.x) * follow
-                    p.vy = (ty - p.y) * follow
+                    p.vx = (tx - p.x) * followDt
+                    p.vy = (ty - p.y) * followDt
                 } else {
-                    p.vx *= 0.968
-                    p.vy *= 0.968
+                    p.vx *= drag
+                    p.vy *= drag
                     // remolino suave mientras se dispersan
                     const dx = p.x - width / 2
                     const dy = p.y - height / 2
-                    p.vx += -dy * 0.0006
-                    p.vy += dx * 0.0006
+                    p.vx += -dy * 0.0006 * dt
+                    p.vy += dx * 0.0006 * dt
                 }
 
                 // repulsion del cursor
@@ -768,8 +825,8 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
                 if (mdist < 110 * 110) {
                     const d = Math.sqrt(mdist) || 1
                     const force = (110 - d) / 110
-                    p.vx += (mdx / d) * force * 1.6
-                    p.vy += (mdy / d) * force * 1.6
+                    p.vx += (mdx / d) * force * 1.6 * dt
+                    p.vy += (mdy / d) * force * 1.6 * dt
                 }
 
                 let speed = Math.hypot(p.vx, p.vy)
@@ -779,26 +836,28 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
                     speed = MAX_SPEED
                 }
 
-                p.x += p.vx
-                p.y += p.vy
+                p.x += p.vx * dt
+                p.y += p.vy * dt
                 p.speed = speed
+                p.fade = fadeAt(p.x, p.y)
             }
 
             drawLinks(formed ? 1 : 0.6)
 
             for (let i = 0; i < particles.length; i++) {
                 const p = particles[i]
+                if (p.fade < 0.02) continue
                 const speed = p.speed
                 const edge = targets[i] && targets[i].edge
                 const baseAlpha = formed ? (edge ? 0.95 : 0.55) : 0.7
-                const alpha = Math.min(1, baseAlpha + speed * 0.05)
+                const alpha = Math.min(1, baseAlpha + speed * 0.05) * p.fade
 
                 // estela: linea desde la posicion anterior
                 if (speed > 0.8) {
                     ctx.beginPath()
                     ctx.moveTo(p.px - p.vx, p.py - p.vy)
                     ctx.lineTo(p.x, p.y)
-                    ctx.strokeStyle = `rgba(${p.color}, ${Math.min(0.45, speed * 0.06)})`
+                    ctx.strokeStyle = `rgba(${p.color}, ${Math.min(0.45, speed * 0.06) * p.fade})`
                     ctx.lineWidth = p.r * 0.9
                     ctx.stroke()
                 }
@@ -824,6 +883,7 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
 
         const start = () => {
             if (animationId) return
+            lastFrame = 0
             animationId = requestAnimationFrame(loop)
         }
 
@@ -868,6 +928,10 @@ function ParticleMorph({ className, label, maxParticles = 1000, overscan = 1.8 }
             resizeObserver.observe(container)
             return () => resizeObserver.disconnect()
         }
+
+        // dibuja un primer frame de inmediato para que el canvas nunca quede
+        // en blanco si la pestaña o la seccion aun no son visibles
+        renderFrame(performance.now())
 
         const visibilityObserver = new IntersectionObserver(
             ([entry]) => {

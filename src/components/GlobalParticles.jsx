@@ -37,16 +37,40 @@ function GlobalParticles() {
         let animationId = null
         const mouse = { x: -9999, y: -9999 }
 
+        // En movil, ocultar/mostrar la barra del navegador al hacer scroll
+        // dispara "resize" constantemente. En vez de recrear las particulas
+        // (lo que se ve como un reinicio del fondo), se conservan y se
+        // reescalan a las nuevas dimensiones.
         const resize = () => {
-            width = window.innerWidth
-            height = window.innerHeight
+            const prevWidth = width
+            const prevHeight = height
+            width = canvas.clientWidth || window.innerWidth
+            height = canvas.clientHeight || window.innerHeight
             canvas.width = width
             canvas.height = height
             const count = Math.min(
                 MAX_PARTICLES,
                 Math.floor((width * height) / DENSITY)
             )
-            particles = createParticles(width, height, count)
+
+            if (!particles.length || !prevWidth || !prevHeight) {
+                particles = createParticles(width, height, count)
+                return
+            }
+
+            const sx = width / prevWidth
+            const sy = height / prevHeight
+            for (const p of particles) {
+                p.x *= sx
+                p.y *= sy
+            }
+            if (particles.length > count) {
+                particles.length = count
+            } else if (particles.length < count) {
+                particles.push(
+                    ...createParticles(width, height, count - particles.length)
+                )
+            }
         }
 
         const onMouseMove = (event) => {
