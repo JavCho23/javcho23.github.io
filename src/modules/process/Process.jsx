@@ -1,9 +1,9 @@
-import "../assets/css/Process.css"
-import "../assets/css/View.css"
+import "./Process.css"
+import "../../shared/styles/View.css"
 
 import { Ear, Rocket, Target } from "lucide-react"
 
-import Constellation from "../components/Constellation"
+import Constellation from "../../shared/components/Constellation"
 
 const steps = [
     {

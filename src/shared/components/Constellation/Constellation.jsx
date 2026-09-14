@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 
-import "../assets/css/Constellation.css"
+import "./Constellation.css"
 
 // Each star sits at a different "depth": deeper stars move less with the
 // scroll, closer ones move more, which is what sells the parallax.

@@ -5,7 +5,7 @@ import path from "node:path"
 // Genera public/og-image.jpg (1200x630) a partir de scripts/og-image.html,
 // inyectando el logo real del sitio para que siempre coincida con la marca.
 const TEMPLATE = path.resolve("scripts/og-image.html")
-const LOGO = path.resolve("src/assets/svg/logo.svg")
+const LOGO = path.resolve("src/shared/assets/svg/logo.svg")
 const OUTPUT = path.resolve("public/og-image.jpg")
 
 const logo = (await fs.readFile(LOGO, "utf8"))

@@ -1,10 +1,10 @@
-import "../assets/css/Services.css"
-import "../assets/css/View.css"
+import "./Services.css"
+import "../../shared/styles/View.css"
 
 import { Bot, Monitor, Plug, Workflow, Wrench } from "lucide-react"
 
-import { useGlow } from "../hooks/useGlow"
-import Constellation from "../components/Constellation"
+import { useGlow } from "../../shared/hooks/useGlow"
+import Constellation from "../../shared/components/Constellation"
 
 const services = [
     {
@@ -68,10 +68,11 @@ function Services() {
                         <h2 className="title">Lo que podemos hacer juntos</h2>
                         <p className="services__lead">
                             ¿Sabías que los procesos que te quitan horas cada
-                            semana se pueden reducir hasta un{" "}
-                            <strong>99%</strong>? ¿Tu sistema ya no se ajusta a
-                            tus objetivos? Diseñamos y desarrollamos software y
-                            flujos de IA a medida para negocios de cualquier tamaño.
+                            semana se pueden <strong>reducir hasta un{" "}
+                            99%</strong>? ¿Tu sistema ya <strong>no se ajusta a
+                            tus objetivos</strong>?                        
+                            <strong>Diseñamos y desarrollamos software y
+                            flujos de IA</strong> a medida para negocios de cualquier tamaño.
                         </p>
                     </>
                 }

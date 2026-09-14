@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react"
 
-import { useReveal } from "../hooks/useReveal"
-import { useTilt } from "../hooks/useTilt"
+import { useReveal } from "../../../shared/hooks/useReveal"
+import { useTilt } from "../../../shared/hooks/useTilt"
 
 const GRADIENT_VARIANTS = ["one", "two", "three", "four"]
 

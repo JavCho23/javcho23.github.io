@@ -1,12 +1,12 @@
-import "../assets/css/Contact.css"
-import "../assets/css/View.css"
+import "./Contact.css"
+import "../../shared/styles/View.css"
 
 import { Handshake, Mail, MessageCircle } from "lucide-react"
 
-import { useReveal } from "../hooks/useReveal"
-import { useGlow } from "../hooks/useGlow"
-import { useTilt } from "../hooks/useTilt"
-import ParticleField from "../components/ParticleField"
+import { useReveal } from "../../shared/hooks/useReveal"
+import { useGlow } from "../../shared/hooks/useGlow"
+import { useTilt } from "../../shared/hooks/useTilt"
+import ParticleField from "./components/ParticleField"
 
 // Contact channels laid out as signals around the core, on opposite sides of
 // the outer ring (x/y are % of the stage). Social networks live in the

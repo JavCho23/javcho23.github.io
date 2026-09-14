@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import logoSvg from "../assets/svg/logo.svg?raw"
+import logoSvg from "../../../shared/assets/svg/logo.svg?raw"
 
 const PALETTE = [
     "202, 220, 252", // secondary (claro)

@@ -1,15 +1,15 @@
-import logo from "../assets/svg/logo.svg"
-import twitter from "../assets/svg/social/twitter.svg"
-import github from "../assets/svg/social/github.svg"
-import linkedin from "../assets/svg/social/linkedin.svg"
-import arrow from "../assets/svg/arrow-down.svg"
+import logo from "../../shared/assets/svg/logo.svg"
+import twitter from "../../shared/assets/svg/social/twitter.svg"
+import github from "../../shared/assets/svg/social/github.svg"
+import linkedin from "../../shared/assets/svg/social/linkedin.svg"
+import arrow from "./assets/arrow-down.svg"
 
-import ParticleMorph from "../components/ParticleMorph"
+import ParticleMorph from "./components/ParticleMorph"
 
-import "../assets/css/Home.css"
-import "../assets/css/View.css"
+import "./Home.css"
+import "../../shared/styles/View.css"
 
-import { useGlow } from "../hooks/useGlow"
+import { useGlow } from "../../shared/hooks/useGlow"
 
 function Home() {
     const glowRef = useGlow()

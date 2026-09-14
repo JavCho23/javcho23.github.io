@@ -1,8 +1,8 @@
-import logo from "../assets/svg/logo.svg"
+import logo from "../../assets/svg/logo.svg"
 
-import "../assets/css/Header.css"
+import "./Header.css"
 
-import { useGlow } from "../hooks/useGlow"
+import { useGlow } from "../../hooks/useGlow"
 
 function Header() {
     const glowRef = useGlow()

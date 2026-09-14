@@ -1,8 +1,8 @@
-import "../assets/css/Skills.css"
-import "../assets/css/View.css"
+import "./Skills.css"
+import "../../shared/styles/View.css"
 
-import { useReveal } from "../hooks/useReveal"
-import { useTilt } from "../hooks/useTilt"
+import { useReveal } from "../../shared/hooks/useReveal"
+import { useTilt } from "../../shared/hooks/useTilt"
 
 const skills = [
     {
@@ -95,7 +95,7 @@ function SkillRow({ skill, index, count }) {
     const revealRef = useReveal(0.1)
     const tiltRef = useTilt()
     const iconSrc = new URL(
-        `../assets/svg/techs/${skill.img}.svg`,
+        `./assets/techs/${skill.img}.svg`,
         import.meta.url
     ).href
     const number = pad(index + 1)

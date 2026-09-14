@@ -1,13 +1,13 @@
-import "../assets/css/Work.css"
-import "../assets/css/View.css"
+import "./Work.css"
+import "../../shared/styles/View.css"
 
 import { Building2, House, ShoppingCart  } from "lucide-react"
 
-import WorkItem from "../components/WorkItem"
+import WorkItem from "./components/WorkItem"
 
-import inboxImg from "../assets/img/work/inbox.png"
-import gerenciaGestarImg from "../assets/img/work/gerencia-gestar.png"
-import buscapatasImg from "../assets/img/work/buscapatas.png"
+import inboxImg from "./assets/inbox.png"
+import gerenciaGestarImg from "./assets/gerencia-gestar.png"
+import buscapatasImg from "./assets/buscapatas.png"
 
 const works = [
     {

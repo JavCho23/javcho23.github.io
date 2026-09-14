@@ -1,12 +1,12 @@
-import "../assets/css/About.css"
-import "../assets/css/View.css"
+import "./About.css"
+import "../../shared/styles/View.css"
 
-import { useReveal } from "../hooks/useReveal"
-import GravityField from "../components/GravityField"
+import { useReveal } from "../../shared/hooks/useReveal"
+import GravityField from "./components/GravityField"
 
-import photo from "../assets/img/me-2025-cutout.webp"
-import linkedinIcon from "../assets/svg/social/linkedin.svg"
-import githubIcon from "../assets/svg/social/github.svg"
+import photo from "./assets/me-2025-cutout.webp"
+import linkedinIcon from "../../shared/assets/svg/social/linkedin.svg"
+import githubIcon from "../../shared/assets/svg/social/github.svg"
 
 // Photo inset inside the stage; GravityField's innerRadius must match
 // (1 - 2 * inset) so orbits start just outside the photo.
