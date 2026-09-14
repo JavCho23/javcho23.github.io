@@ -20,6 +20,12 @@ const MAX_LINKS = 3
 // Captura: cada cierto tiempo una particula cae en espiral hacia la foto
 const CAPTURE_EVERY_MS = 1900
 const CAPTURE_FALL_MS = 1800
+// Cursor: las particulas se apartan y vuelven a su sitio con un resorte,
+// igual que en el resto de la pagina
+const MOUSE_RADIUS = 120
+const MOUSE_FORCE = 1.4
+const SPRING = 0.045
+const SPRING_DAMPING = 0.82
 
 // Llaves del logo: alto y separacion respecto al borde de la foto
 const BRACE_HEIGHT = 1.7
@@ -146,6 +152,11 @@ function createOrbiter(i, radius) {
         z: 0,
         px: 0,
         py: 0,
+        // desplazamiento por el cursor y su velocidad (resorte hacia 0)
+        ox: 0,
+        oy: 0,
+        ovx: 0,
+        ovy: 0,
     }
 }
 
@@ -166,6 +177,10 @@ function createAnchored(i, anchor, side) {
         y: 0,
         px: 0,
         py: 0,
+        ox: 0,
+        oy: 0,
+        ovx: 0,
+        ovy: 0,
     }
 }
 
@@ -204,6 +219,7 @@ function GravityField({
         let lastCapture = 0
         let settleStart = 0
         let isVisible = false
+        const mouse = { x: -9999, y: -9999 }
 
         const build = () => {
             const list = []
@@ -275,6 +291,26 @@ function GravityField({
             p.y = sy + (target.y + jitterY - sy) * settle
         }
 
+        // Empuja la particula lejos del cursor y la deja volver con un
+        // resorte amortiguado; se suma a su posicion analitica.
+        const nudge = (p, dt) => {
+            const mdx = p.x + p.ox - mouse.x
+            const mdy = p.y + p.oy - mouse.y
+            const d2 = mdx * mdx + mdy * mdy
+            if (d2 < MOUSE_RADIUS * MOUSE_RADIUS) {
+                const d = Math.sqrt(d2) || 1
+                const force = ((MOUSE_RADIUS - d) / MOUSE_RADIUS) * MOUSE_FORCE
+                p.ovx += (mdx / d) * force * dt
+                p.ovy += (mdy / d) * force * dt
+            }
+            p.ovx = (p.ovx - p.ox * SPRING * dt) * Math.pow(SPRING_DAMPING, dt)
+            p.ovy = (p.ovy - p.oy * SPRING * dt) * Math.pow(SPRING_DAMPING, dt)
+            p.ox += p.ovx * dt
+            p.oy += p.ovy * dt
+            p.x += p.ox
+            p.y += p.oy
+        }
+
         const step = (now, dt) => {
             if (!settleStart) settleStart = now
             const settle = easeOutCubic(Math.min(1, (now - settleStart) / BRACE_SETTLE_MS))
@@ -294,6 +330,7 @@ function GravityField({
 
                 if (p.kind === "brace") {
                     placeBrace(p, now, settle)
+                    nudge(p, dt)
                     continue
                 }
 
@@ -313,6 +350,7 @@ function GravityField({
                     p.R = p.baseR + Math.sin(now / 1400 + p.wobble) * 0.012
                 }
                 projectOrbit(p)
+                nudge(p, dt)
             }
         }
 
@@ -485,11 +523,24 @@ function GravityField({
             if (document.hidden) stop()
             else if (isVisible) start()
         }
+        const onMouseMove = (event) => {
+            const rect = front.getBoundingClientRect()
+            mouse.x = event.clientX - rect.left
+            mouse.y = event.clientY - rect.top
+        }
+        const onMouseLeave = () => {
+            mouse.x = -9999
+            mouse.y = -9999
+        }
         document.addEventListener("visibilitychange", onVisibilityChange)
+        window.addEventListener("mousemove", onMouseMove, { passive: true })
+        document.addEventListener("mouseleave", onMouseLeave)
 
         return () => {
             stop()
             document.removeEventListener("visibilitychange", onVisibilityChange)
+            window.removeEventListener("mousemove", onMouseMove)
+            document.removeEventListener("mouseleave", onMouseLeave)
             resizeObserver.disconnect()
             visibilityObserver.disconnect()
         }
