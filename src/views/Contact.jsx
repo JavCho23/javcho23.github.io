@@ -18,7 +18,6 @@ const channels = [
         icon: <MessageCircle />,
         x: 82,
         y: 24,
-        primary: true,
     },
     {
         label: "Correo",
