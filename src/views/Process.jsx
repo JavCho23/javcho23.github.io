@@ -28,7 +28,7 @@ const steps = [
         tags: ["Entregas semanales", "Feedback continuo"],
         title: "Entregamos valor rápido",
         description:
-            "Si el proyecto es más robusto, avanzamos con entregas recurrentes desde el inicio.",
+            "En cada proyecto avanzamos con entregas recurrentes desde el inicio.",
         x: 88,
         y: 50,
     },
@@ -43,7 +43,7 @@ function Process() {
                 header={
                     <>
                         <span className="kicker">¿Cómo trabajamos?</span>
-                        <h2 className="title">Entregando valor desde el día uno</h2>
+                        <h2 className="title">Entregando valor <br/> Desde el día uno</h2>
                     </>
                 }
             />
