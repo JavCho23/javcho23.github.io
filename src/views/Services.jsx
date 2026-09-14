@@ -83,7 +83,7 @@ function Services() {
                         rel="noreferrer"
                         className="services__cta-button glow-btn"
                     >
-                        Cuéntanos tu proyecto
+                        Cuéntanos sobre tu proyecto
                     </a>
                 }
             />
