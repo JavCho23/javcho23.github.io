@@ -24,7 +24,7 @@ function About() {
 
     return (
         <section id="about" className="about view">
-            <span className="kicker">Sobre mí</span>
+            <span className="kicker">Conócenos</span>
             <h2 className="title">Quién está detrás</h2>
 
             <div ref={revealRef} className="reveal about__reveal">
