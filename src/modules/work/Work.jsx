@@ -33,7 +33,7 @@ const works = [
         name: "Perlas y Diamantes",
         tag: "Tienda online",
         icon: ShoppingCart,
-        link: "#",
+        link: "https://perlasydiamantes.com",
         stack: ["Web app", "E-commerce"],
         description:
             "Perlas y Diamantes es una tienda online que ofrece una amplia selección de joyas y accesorios. Desarrollamos la plataforma completa, incluyendo el sistema de gestión de inventario y el proceso de compra con confirmación por WhatsApp.",
