@@ -43,7 +43,7 @@ function Process() {
                 header={
                     <>
                         <span className="kicker">¿Cómo trabajamos?</span>
-                        <h2 className="title">Entregando valor <br/> Desde el día uno</h2>
+                        <h2 className="title">Entregando valor <br/> Desde el día UNO</h2>
                     </>
                 }
             />
