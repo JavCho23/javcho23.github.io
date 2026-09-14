@@ -375,6 +375,7 @@ function Constellation({ points, layout = "scatter", header = null, footer = nul
                                         }s`,
                                     }}
                                     onClick={() => scrollToIndex(index)}
+                                    aria-label={point.title}
                                     aria-current={isActive ? "true" : undefined}
                                 >
                                     <span className="constellation__star-body">

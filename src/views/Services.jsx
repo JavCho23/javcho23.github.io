@@ -12,7 +12,7 @@ const services = [
         tags: ["Reportes", "Notificaciones", "Flujos con IA"],
         title: "Automatización de procesos",
         description:
-            "Elimino tareas manuales y repetitivas: reportes, notificaciones, sincronización entre herramientas, flujos o funcionalidades de IA.",
+            "Eliminamos tareas manuales y repetitivas: reportes, notificaciones, sincronización entre herramientas, flujos o funcionalidades de IA.",
         x: 12,
         y: 25,
     },
@@ -21,7 +21,7 @@ const services = [
         tags: ["Pagos", "WhatsApp", "Hojas de cálculo", "ERP"],
         title: "Integraciones y APIs",
         description:
-            "Conecto las herramientas que ya usas: pagos, mensajería, hojas de cálculo, ERPs.",
+            "Conectamos las herramientas que ya usas: pagos, mensajería, hojas de cálculo, ERPs.",
         x: 38,
         y: 14,
     },
@@ -39,7 +39,7 @@ const services = [
         tags: ["Atención 24/7", "Ventas", "Soporte"],
         title: "Creación de agentes de IA",
         description:
-            "Diseño y desarrollo agentes de IA a medida que automatizan conversaciones, atención al cliente y tareas operativas de tu negocio.",
+            "Diseñamos y desarrollamos agentes de IA a medida que automatizan conversaciones, atención al cliente y tareas operativas de tu negocio.",
         x: 85,
         y: 55,
     },
@@ -64,14 +64,14 @@ function Services() {
                 points={services}
                 header={
                     <>
-                        <span className="kicker">¿Cómo puedo ayudarte?</span>
+                        <span className="kicker">¿Cómo podemos ayudarte?</span>
                         <h2 className="title">Lo que podemos hacer juntos</h2>
                         <p className="services__lead">
                             ¿Sabías que los procesos que te quitan horas cada
                             semana se pueden reducir hasta un{" "}
                             <strong>99%</strong>? ¿Tu sistema ya no se ajusta a
-                            tus objetivos? Diseño y desarrollo software y flujos
-                            de IA a medida para negocios de cualquier tamaño.
+                            tus objetivos? Diseñamos y desarrollamos software y
+                            flujos de IA a medida para negocios de cualquier tamaño.
                         </p>
                     </>
                 }
@@ -83,7 +83,7 @@ function Services() {
                         rel="noreferrer"
                         className="services__cta-button glow-btn"
                     >
-                        Cuéntame tu proyecto
+                        Cuéntanos tu proyecto
                     </a>
                 }
             />

@@ -9,8 +9,8 @@ const steps = [
     {
         icon: Ear,
         tags: ["Reunión inicial", "Sin compromiso"],
-        title: "Te escucho",
-        description: "Entiendo qué te duele hoy y cuáles son tus necesidades reales.",
+        title: "Te escuchamos",
+        description: "Entendemos qué te duele hoy y cuáles son tus necesidades reales.",
         x: 12,
         y: 50,
     },
@@ -26,7 +26,7 @@ const steps = [
     {
         icon: Rocket,
         tags: ["Entregas semanales", "Feedback continuo"],
-        title: "Entrego valor rápido",
+        title: "Entregamos valor rápido",
         description:
             "Si el proyecto es más robusto, avanzamos con entregas recurrentes desde el inicio.",
         x: 88,
@@ -42,7 +42,7 @@ function Process() {
                 points={steps}
                 header={
                     <>
-                        <span className="kicker">¿Cómo trabajo?</span>
+                        <span className="kicker">¿Cómo trabajamos?</span>
                         <h2 className="title">Entregando valor desde el día uno</h2>
                     </>
                 }

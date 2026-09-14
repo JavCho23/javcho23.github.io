@@ -27,8 +27,8 @@ function Home() {
                 <div className="home__content">
                     <img className="home__logo" src={logo} alt="{ Jav }" />
                     <p className="home__eyebrow">
-                        Engineering Manager · Software Developer · AWS Certified
-                        Cloud Solutions Architect
+                        Gerencia de Ingeniería · Desarrollo de software ·
+                        Certificados en AWS como Cloud Solutions Architect
                     </p>
                     <h1 className="home__title">
                         Software que impulsa tu negocio
@@ -72,7 +72,12 @@ function Home() {
                 </div>
             </div>
 
-            <a ref={glowRef} className="home__footer glow-btn" href="#services">
+            <a
+                ref={glowRef}
+                className="home__footer glow-btn"
+                href="#services"
+                aria-label="Ir a servicios"
+            >
                 <img className="home__arrow" src={arrow} alt="" />
             </a>
         </section>

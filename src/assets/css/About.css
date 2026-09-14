@@ -3,88 +3,223 @@
     overflow: hidden;
 }
 
-.about__container {
+.about__reveal {
     width: 100%;
-    max-width: 42em;
+    max-width: 60em;
+    margin-top: 2.5em;
+    translate: 0 2em;
+    transition: opacity 0.7s ease, translate 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about__reveal.is-visible {
+    translate: 0 0;
+}
+
+.about__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2em;
+    align-items: center;
     text-align: center;
+}
+
+/* ---------- Visual: particles converging into the photo ---------- */
+
+/* The canvas bleeds past the stage (overscan), so the section clips it and
+   the engine fades particles before they hit that edge. */
+.about__stage {
     position: relative;
+    /* the braces extend ~50% past the stage on each side, keep them on screen */
+    width: min(100%, 15em);
+    aspect-ratio: 1;
+    margin: 0 auto;
+}
+
+/* Back canvas under the photo, front canvas over it (GravityField splits
+   each orbit by depth), so the photo hides the far half of every orbit. */
+.about__particles {
+    display: block;
+    pointer-events: none;
+}
+
+.about__particles--back {
+    z-index: 0;
+}
+
+.about__particles--front {
+    z-index: 2;
+}
+
+/* Same inset GravityField uses for its inner radius. */
+.about__photo-wrap {
+    position: absolute;
+    inset: var(--inset, 6%);
     z-index: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: radial-gradient(
+        circle at 50% 35%,
+        rgba(102, 131, 255, 0.6) 0%,
+        rgba(76, 110, 245, 0.4) 40%,
+        rgba(30, 39, 97, 0.5) 75%,
+        rgba(20, 26, 74, 0.4) 100%
+    );
+    box-shadow: 0 0 0 1px rgba(202, 220, 252, 0.18), 0 0 40px rgba(76, 110, 245, 0.35);
+}
+
+.about__photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ---------- Copy ---------- */
+
+.about__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 32em;
+    margin: 0 auto;
+}
+
+.about__kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    font-size: 0.7em;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--primary-color);
+}
+
+.about__kicker::before {
+    content: "";
+    width: 2.2em;
+    height: 1px;
+    background: var(--primary-color);
 }
 
 .about__title {
-    margin-bottom: 0.6em;
+    color: var(--important-text-color);
+    font-size: clamp(1.4em, 4vw, 1.9em);
+    font-weight: 800;
+    line-height: 1.15;
+    margin: 0.6em 0 0.7em 0;
+    text-wrap: balance;
+}
+
+.about__tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5em;
+    padding: 0;
+    margin: 0 0 0.8em 0;
+}
+
+.about__tag {
+    font-size: 0.72em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.35em 0.85em;
+    border-radius: 999px;
+    border: 1px solid rgba(76, 110, 245, 0.45);
+    background: rgba(76, 110, 245, 0.12);
+    color: var(--secondary-color);
+    transition: background 0.25s ease, border-color 0.25s ease;
 }
 
 .about__description {
-    text-align: left;
+    color: var(--muted-text-color);
+    font-size: 0.92em;
+    line-height: 1.6;
+    margin: 0.4em 0;
+    text-wrap: pretty;
 }
 
-.about__bracket {
-    position: absolute;
-    top: 0.2em;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 12em;
-    font-weight: 800;
-    color: var(--important-text-color);
-    opacity: 0.04;
-    z-index: 0;
-    pointer-events: none;
-    line-height: 1;
-    white-space: nowrap;
+.about__description strong {
+    color: var(--text-color);
 }
 
-.about__badge {
-    position: absolute;
-    width: 2.6em;
-    height: 2.6em;
-    padding: 0.6em;
-    box-sizing: border-box;
-    border-radius: 50%;
-    background-color: var(--surface-color-alt);
+.about__link {
+    color: var(--secondary-color);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(76, 110, 245, 0.5);
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.about__link:hover {
+    color: var(--primary-color-hover);
+    border-color: var(--primary-color-hover);
+}
+
+.about__social {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7em;
+    margin-top: 1.3em;
+}
+
+.about__social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 0.65em 1.2em;
+    border-radius: 999px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--secondary-color);
+    background: var(--surface-color);
     border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-sm);
-    z-index: 1;
-    display: none;
-    animation: about-badge-float 4s ease-in-out infinite;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease,
+        transform 0.25s ease;
 }
 
-.about__badge--one {
-    top: 15%;
-    left: 8%;
-    animation-delay: 0s;
+.about__social-link img {
+    width: 1.1em;
+    height: 1.1em;
 }
 
-.about__badge--two {
-    top: 55%;
-    right: 6%;
-    animation-delay: 1.2s;
+.about__social-link:hover {
+    border-color: rgba(76, 110, 245, 0.6);
+    box-shadow: 0 0 0 1px rgba(76, 110, 245, 0.2),
+        0 8px 24px rgba(76, 110, 245, 0.25);
+    transform: translateY(-2px);
 }
 
-.about__badge--three {
-    bottom: 10%;
-    left: 14%;
-    animation-delay: 2.4s;
-}
+/* ---------- Desktop ---------- */
 
-@keyframes about-badge-float {
-    0%,
-    100% {
-        transform: translateY(0);
+@media (min-width: 900px) {
+    .about__row {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+        gap: 4em;
+        text-align: left;
     }
-    50% {
-        transform: translateY(-0.6em);
-    }
-}
 
-@media (min-width: 1024px) {
-    .about__badge {
-        display: block;
+    .about__stage {
+        width: min(100%, 22em);
+    }
+
+    .about__content {
+        align-items: flex-start;
+        margin: 0;
+        max-width: none;
+    }
+
+    .about__tags,
+    .about__social {
+        justify-content: flex-start;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .about__badge {
-        animation: none;
+    .about__reveal {
+        translate: 0 0;
+        transition: none;
     }
 }

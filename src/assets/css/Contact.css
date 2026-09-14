@@ -1,13 +1,12 @@
 .contact {
     min-height: 70vh;
     padding-top: 6em;
-    padding-bottom: 2em;
+    padding-bottom: 3em;
     background: linear-gradient(
         160deg,
         var(--background-color) 0%,
         var(--primary-deep) 140%
     );
-    text-align: center;
     overflow: hidden;
     position: relative;
 }
@@ -21,73 +20,364 @@
     pointer-events: none;
 }
 
-.contact__content {
-    max-width: 34em;
+.contact__reveal {
+    width: 100%;
+    max-width: 60em;
     position: relative;
     z-index: 1;
+    translate: 0 2em;
+    transition: opacity 0.7s ease, translate 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact__reveal.is-visible {
+    translate: 0 0;
+}
+
+/* useTilt writes --tilt-x/--tilt-y here; the constellation reads them. */
+.contact__row {
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3em;
+    align-items: center;
+    text-align: center;
+}
+
+/* ---------- Copy ---------- */
+
+.contact__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 30em;
+    margin: 0 auto;
+}
+
+.contact__title {
+    font-size: clamp(1.7em, 5vw, 2.6em);
+    text-wrap: balance;
 }
 
 .contact__subtitle {
     color: var(--secondary-color);
-    font-size: 1.2em;
+    font-size: 1.15em;
     font-weight: 500;
-    margin-top: 0;
-}
-
-.contact__cta-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9em;
-    margin-top: 1.6em;
+    margin: 0.5em 0 0 0;
 }
 
 .contact__cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5em;
-    padding: 0.9em 1.6em;
-    border-radius: 30px;
+    gap: 0.6em;
+    margin-top: 1.6em;
+    padding: 0.95em 1.8em;
+    border-radius: 999px;
     font-weight: 700;
     font-size: 0.95em;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(76, 110, 245, 0.35);
     transition: transform 0.2s ease, background-color 0.2s ease,
-        border-color 0.2s ease;
+        box-shadow 0.2s ease;
+}
+
+.contact__cta:hover {
+    background-color: var(--primary-color-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px rgba(76, 110, 245, 0.5);
 }
 
 .contact__cta-icon {
-    width: 1.1em;
-    height: 1.1em;
+    width: 1.15em;
+    height: 1.15em;
 }
 
-.contact__cta--primary {
-    background-color: var(--primary-color);
-    color: #ffffff;
+.contact__hint {
+    color: var(--muted-text-color);
+    font-size: 0.85em;
+    margin: 1.2em 0 0 0;
 }
 
-.contact__cta--primary:hover {
-    background-color: var(--primary-color-hover);
-    transform: translateY(-2px);
+/* ---------- Constellation of channels ---------- */
+
+.contact__visual {
+    position: relative;
+    width: min(100%, 15em);
+    aspect-ratio: 1;
+    /* room for the node labels that hang past the ring */
+    margin: 1em auto 2.4em;
+    transform: perspective(900px) rotateX(calc(var(--tilt-x) * 1.2))
+        rotateY(calc(var(--tilt-y) * 1.2));
+    transform-style: preserve-3d;
+    transition: transform 0.25s ease-out;
 }
 
-.contact__cta--secondary {
+.contact__halo {
+    position: absolute;
+    inset: 16%;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(76, 110, 245, 0.6) 0%,
+        rgba(76, 110, 245, 0.18) 45%,
+        transparent 72%
+    );
+    filter: blur(20px);
+    animation: skill-halo 5.5s ease-in-out infinite;
+}
+
+.contact__orbit {
+    position: absolute;
+    border-radius: 50%;
+    animation: skill-spin var(--spin, 30s) linear infinite;
+}
+
+.contact__orbit--outer {
+    inset: 0;
+    --spin: 40s;
+    border: 1px dashed rgba(202, 220, 252, 0.2);
+}
+
+.contact__orbit--inner {
+    inset: 22%;
+    --spin: 26s;
+    border: 1px solid rgba(76, 110, 245, 0.3);
+    animation-direction: reverse;
+}
+
+.contact__orbit i {
+    position: absolute;
+    top: -0.28em;
+    left: 50%;
+    width: 0.56em;
+    height: 0.56em;
+    margin-left: -0.28em;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(202, 220, 252, 0.9),
+        0 0 22px rgba(76, 110, 245, 0.7);
+}
+
+.contact__orbit--inner i {
+    width: 0.4em;
+    height: 0.4em;
+    top: -0.2em;
+    margin-left: -0.2em;
+    background: var(--primary-color-hover);
+}
+
+/* Lines from the logo to each channel, with a slow "flow" toward the nodes. */
+.contact__lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.contact__lines line {
+    stroke: rgba(120, 147, 255, 0.75);
+    stroke-width: 1.3;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 4 6;
+    animation: contact-flow 2.4s linear infinite;
+}
+
+/* Signal rings expanding from the core. */
+.contact__ping {
+    position: absolute;
+    inset: 34%;
+    border-radius: 50%;
+    border: 1.5px solid rgba(120, 147, 255, 0.8);
+    opacity: 0;
+    animation: contact-ping 3.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.contact__ping--late {
+    animation-delay: 1.8s;
+}
+
+/* Centered via inset (not translate) because skill-float animates translate. */
+.contact__core {
+    position: absolute;
+    inset: 34%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(
+        circle at 50% 35%,
+        var(--surface-color-alt),
+        var(--surface-color) 70%
+    );
+    border: 1px solid rgba(202, 220, 252, 0.25);
+    box-shadow: 0 0 0 6px rgba(76, 110, 245, 0.12), var(--shadow-md),
+        0 0 40px rgba(76, 110, 245, 0.4);
+    transform: translateZ(30px);
+    animation: skill-float 6s ease-in-out infinite;
+}
+
+.contact__core svg {
+    width: 44%;
+    height: 44%;
+    color: var(--secondary-color);
+    stroke-width: 1.6;
+}
+
+/* Channel nodes: styled like constellation stars, but they're real links. */
+.contact__node {
+    position: absolute;
+    top: var(--y);
+    left: var(--x);
+    translate: -50% -50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45em;
+    color: var(--muted-text-color);
+    transform: translateZ(60px);
+    animation: contact-node-float 4.5s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * -1.1s);
+}
+
+.contact__node-core {
+    width: 4.2em;
+    height: 4.2em;
+    border-radius: 50%;
+    background: var(--surface-color-alt);
     border: 1px solid var(--border-color);
-    color: var(--text-color);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-color);
+    transition: background 0.3s ease, border-color 0.3s ease,
+        box-shadow 0.3s ease, scale 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+        color 0.3s ease;
 }
 
-.contact__cta--secondary:hover {
-    border-color: var(--secondary-color);
-    transform: translateY(-2px);
+.contact__node-core svg {
+    width: 1.8em;
+    height: 1.8em;
 }
 
-@media (min-width: 630px) {
-    .contact__cta-group {
-        flex-direction: row;
-        justify-content: center;
+.contact__node-label {
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+}
+
+.contact__node:hover .contact__node-core,
+.contact__node:focus-visible .contact__node-core {
+    background: var(--primary-color);
+    border-color: var(--primary-color-hover);
+    color: #ffffff;
+    scale: 1.12;
+    box-shadow: 0 0 0 6px rgba(76, 110, 245, 0.18),
+        0 0 28px rgba(76, 110, 245, 0.6);
+}
+
+.contact__node:hover .contact__node-label,
+.contact__node:focus-visible .contact__node-label {
+    color: var(--important-text-color);
+}
+
+/* The main channel is lit from the start. */
+.contact__node--primary .contact__node-core {
+    background: var(--primary-color);
+    border-color: var(--primary-color-hover);
+    color: #ffffff;
+    box-shadow: 0 0 0 5px rgba(76, 110, 245, 0.16),
+        0 0 24px rgba(76, 110, 245, 0.55);
+}
+
+.contact__node--primary .contact__node-label {
+    color: var(--important-text-color);
+}
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 900px) {
+    .contact__row {
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        gap: 4em;
+        text-align: left;
+    }
+
+    .contact__content {
+        align-items: flex-start;
+        margin: 0;
+        max-width: none;
+    }
+
+    .contact__title {
+        text-align: left;
+    }
+
+    .contact__visual {
+        width: min(100%, 19em);
+        margin: 0 auto;
     }
 }
 
 @media (min-width: 1200px) {
     .contact {
         min-height: 85vh;
+    }
+}
+
+/* ---------- Motion ---------- */
+
+@keyframes contact-flow {
+    to {
+        stroke-dashoffset: -20;
+    }
+}
+
+@keyframes contact-ping {
+    0% {
+        scale: 1;
+        opacity: 0.8;
+    }
+    100% {
+        scale: 2.9;
+        opacity: 0;
+    }
+}
+
+@keyframes contact-node-float {
+    0%,
+    100% {
+        margin-top: 0;
+    }
+    50% {
+        margin-top: -0.4em;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .contact__reveal {
+        translate: 0 0;
+        transition: none;
+    }
+    .contact__visual {
+        transform: none;
+        transition: none;
+    }
+    .contact__halo,
+    .contact__orbit,
+    .contact__core,
+    .contact__ping,
+    .contact__node,
+    .contact__lines line {
+        animation: none;
+    }
+    .contact__ping {
+        opacity: 0.35;
+        scale: 1.6;
     }
 }

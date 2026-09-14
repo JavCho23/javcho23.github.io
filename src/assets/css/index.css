@@ -4,6 +4,7 @@
     --surface-color-alt: #1c2447;
     --primary-color: #4c6ef5;
     --primary-color-hover: #6683ff;
+    --primary-text-color: #7b93ff;
     --primary-deep: #1e2761;
     --secondary-color: #cadcfc;
     --title-color: #cadcfc;
@@ -134,6 +135,36 @@ canvas[class$="__particles"] {
 
 .glow-btn:hover::before {
     opacity: 1;
+}
+
+/* Shared "stage" motion for the big illustrations (Skills, About) and the
+   Work banner icons. */
+@keyframes skill-float {
+    0%,
+    100% {
+        translate: 0 0;
+    }
+    50% {
+        translate: 0 -0.5em;
+    }
+}
+
+@keyframes skill-halo {
+    0%,
+    100% {
+        opacity: 0.7;
+        scale: 0.94;
+    }
+    50% {
+        opacity: 1;
+        scale: 1.06;
+    }
+}
+
+@keyframes skill-spin {
+    to {
+        rotate: 360deg;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

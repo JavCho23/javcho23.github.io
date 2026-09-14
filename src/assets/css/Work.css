@@ -2,13 +2,37 @@
     padding-top: 6em;
 }
 
+/* Grilla de 6 columnas para poder repartir 1 / 3 / 2 tarjetas por fila:
+   el rol actual ocupa todo el ancho, los freelance van en tres y los
+   anteriores en dos. Rompe la lectura tipo tabla del 2x3 uniforme. */
 .works {
     width: 100%;
-    max-width: 60em;
+    max-width: 64em;
     margin-top: 2.5em;
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.2em;
+}
+
+.work__item {
+    min-width: 0;
+}
+
+/* Entrada: el destacado sube, el resto entra alternando desde los lados.
+   El desplazamiento solo existe mientras no es visible; así ninguna regla
+   de dirección puede pisar el estado final por especificidad. */
+.reveal.work__item {
+    transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0s);
+}
+.reveal.work__item:not(.is-visible) {
+    transform: translateY(1.5em);
+}
+.reveal.work__item:nth-child(even):not(.is-visible) {
+    transform: translateX(-1.5em);
+}
+.reveal.work__item:nth-child(odd):not(.work__item--featured):not(.is-visible) {
+    transform: translateX(1.5em);
 }
 
 .work__link {
@@ -25,6 +49,8 @@
     box-sizing: border-box;
     height: 100%;
     text-align: left;
+    display: flex;
+    flex-direction: column;
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -34,10 +60,12 @@
 }
 
 .work__banner {
-    height: 8em;
+    height: 11em;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
     transition: transform 0.4s ease;
 }
 
@@ -46,13 +74,18 @@
 }
 
 .work__banner-icon {
-    font-size: 3em;
+    display: inline-flex;
+    color: #ffffff;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
     animation: skill-float 3.6s ease-in-out infinite;
 }
 
+.work__banner-icon svg {
+    width: 3em;
+    height: 3em;
+}
+
 .work__banner--image {
-    height: 11em;
     background-color: #f5f6fa;
     overflow: hidden;
 }
@@ -79,6 +112,9 @@
 
 .work__body {
     padding: 1.6em;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .work__tag {
@@ -94,6 +130,24 @@
     font-size: 1.25em;
     font-weight: 700;
     margin: 0.3em 0 0.5em 0;
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+}
+
+.work__title-arrow {
+    width: 0.8em;
+    height: 0.8em;
+    color: var(--muted-text-color);
+    opacity: 0;
+    transform: translate(-0.3em, 0.3em);
+    transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+}
+
+.work__card:hover .work__title-arrow {
+    opacity: 1;
+    transform: none;
+    color: var(--primary-color);
 }
 
 .work__description {
@@ -107,7 +161,7 @@
     flex-wrap: wrap;
     gap: 0.5em;
     list-style: none;
-    margin: 0;
+    margin: auto 0 0 0;
     padding: 0;
 }
 
@@ -119,14 +173,152 @@
     border-radius: 20px;
 }
 
-@media (min-width: 900px) {
+/* ---------- Destacado (rol actual) ---------- */
+
+.work__item--featured .work__banner {
+    height: 10em;
+}
+
+.work__item--featured .work__banner-icon svg {
+    width: 4em;
+    height: 4em;
+}
+
+/* Halo detrás del icono para que el banner ancho no quede vacío */
+.work__item--featured .work__banner::before {
+    content: "";
+    position: absolute;
+    width: 14em;
+    height: 14em;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.16) 0%,
+        rgba(255, 255, 255, 0) 65%
+    );
+    pointer-events: none;
+}
+
+.work__item--featured .work__title {
+    font-size: 1.6em;
+}
+
+.work__item--featured .work__description {
+    font-size: 1em;
+    max-width: 34em;
+}
+
+/* ---------- Tablet: 2 columnas ---------- */
+
+@media (min-width: 700px) {
     .works {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Las dos tarjetas de icono (rol actual y HolaDepa) van a todo el
+       ancho en horizontal; las cuatro con captura quedan en un 2x2. */
+    .work__item:nth-child(-n + 2) {
+        grid-column: 1 / -1;
+    }
+
+    .work__item:nth-child(-n + 2) .work__card {
+        flex-direction: row;
+    }
+
+    .work__item:nth-child(-n + 2) .work__banner {
+        height: auto;
+        width: 38%;
+    }
+
+    .work__item:nth-child(-n + 2) .work__body {
+        justify-content: center;
+    }
+
+    .work__item:nth-child(-n + 2) .work__stack {
+        margin-top: 0;
+    }
+
+    .work__item--featured .work__body {
+        padding: 2.2em 2.4em;
+    }
+}
+
+/* ---------- Desktop: 1 / 3 / 2 ---------- */
+
+@media (min-width: 1000px) {
+    .works {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1.4em;
+    }
+
+    .work__item {
+        grid-column: span 2;
+    }
+
+    .work__item--featured {
+        grid-column: 1 / -1;
+    }
+
+    /* HolaDepa vuelve a vertical para alinearse con la fila de tres */
+    .work__item:nth-child(2) {
+        grid-column: span 2;
+    }
+
+    .work__item:nth-child(2) .work__card {
+        flex-direction: column;
+    }
+
+    .work__item:nth-child(2) .work__banner {
+        width: auto;
+        height: 11em;
+    }
+
+    .work__item:nth-child(2) .work__body {
+        justify-content: flex-start;
+    }
+
+    .work__item:nth-child(2) .work__stack {
+        margin-top: auto;
+    }
+
+    /* Proyectos anteriores: más anchos pero compactos, en horizontal */
+    .work__item:nth-child(n + 5) {
+        grid-column: span 3;
+    }
+
+    .work__item:nth-child(n + 5) .work__card {
+        flex-direction: row;
+    }
+
+    .work__item:nth-child(n + 5) .work__banner {
+        height: auto;
+        width: 36%;
+    }
+
+    .work__item:nth-child(n + 5) .work__body {
+        justify-content: center;
+        padding: 1.4em 1.6em;
+    }
+
+    .work__item:nth-child(n + 5) .work__description {
+        font-size: 0.85em;
+    }
+
+    .work__item:nth-child(n + 5) .work__stack {
+        margin-top: 0;
+    }
+
+    .work__item--featured .work__banner {
+        width: 32%;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .work__banner-icon {
         animation: none;
+    }
+
+    .reveal.work__item {
+        transition: opacity 0.6s ease;
     }
 }

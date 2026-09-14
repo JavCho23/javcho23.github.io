@@ -20,7 +20,7 @@
 }
 
 .kicker {
-    color: var(--primary-color);
+    color: var(--primary-text-color);
     text-transform: uppercase;
     letter-spacing: 0.18em;
     font-size: 0.8em;

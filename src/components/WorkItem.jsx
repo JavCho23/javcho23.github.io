@@ -1,18 +1,25 @@
+import { ArrowUpRight } from "lucide-react"
+
 import { useReveal } from "../hooks/useReveal"
 import { useTilt } from "../hooks/useTilt"
 
 const GRADIENT_VARIANTS = ["one", "two", "three", "four"]
 
-function WorkItem({ work, index }) {
+function WorkItem({ work, index, featured = false }) {
     const revealRef = useReveal(index * 0.1)
     const tiltRef = useTilt()
     const variant = GRADIENT_VARIANTS[index % GRADIENT_VARIANTS.length]
+    const Icon = work.icon
+    const isExternal = work.link !== "#"
 
     return (
-        <div ref={revealRef} className="reveal">
+        <div
+            ref={revealRef}
+            className={`reveal work__item${featured ? " work__item--featured" : ""}`}
+        >
             <a
                 href={work.link}
-                target={work.link === "#" ? undefined : "_blank"}
+                target={isExternal ? "_blank" : undefined}
                 rel="noreferrer"
                 className="work__link"
             >
@@ -27,13 +34,24 @@ function WorkItem({ work, index }) {
                         </div>
                     ) : (
                         <div className={`work__banner work__banner--${variant}`}>
-                            <span className="work__banner-icon">{work.icon}</span>
+                            <span className="work__banner-icon">
+                                <Icon strokeWidth={1.5} aria-hidden="true" />
+                            </span>
                         </div>
                     )}
                     <div className="work__body">
                         <header className="work__header">
                             <span className="work__tag">{work.tag}</span>
-                            <h3 className="work__title">{work.name}</h3>
+                            <h3 className="work__title">
+                                {work.name}
+                                {isExternal && (
+                                    <ArrowUpRight
+                                        className="work__title-arrow"
+                                        strokeWidth={2}
+                                        aria-hidden="true"
+                                    />
+                                )}
+                            </h3>
                         </header>
                         <p className="work__description">{work.description}</p>
                         <ul className="work__stack">
