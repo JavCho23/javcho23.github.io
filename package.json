@@ -1,5 +1,5 @@
 {
-    "homepage": "https://javcho23.github.io",
+    "homepage": "https://javcho.com",
     "name": "personal-page",
     "version": "0.1.0",
     "private": true,
@@ -10,9 +10,8 @@
         "build": "vite build && node scripts/prerender.js",
         "build:client": "vite build",
         "prerender": "node scripts/prerender.js",
-        "preview": "vite preview",
-        "predeploy": "npm run build",
-        "deploy": "gh-pages -d dist"
+        "og-image": "node scripts/og-image.mjs",
+        "preview": "vite preview"
     },
     "engines": {
         "node": ">=18"
@@ -38,7 +37,6 @@
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^4.3.4",
-        "gh-pages": "^6.2.0",
         "puppeteer": "^25.10.0",
         "vite": "^6.0.7"
     }

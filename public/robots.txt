@@ -2,4 +2,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://javcho23.github.io/sitemap.xml
+Sitemap: https://javcho.com/sitemap.xml

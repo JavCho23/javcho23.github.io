@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;width:1200px;height:630px;overflow:hidden}
+  body{font-family:"Roboto",sans-serif;background:#0b0e1c;color:#e7ecfc;position:relative}
+  .glow{position:absolute;border-radius:50%;filter:blur(120px)}
+  .glow-1{width:620px;height:620px;left:-160px;top:-220px;background:#1e2761;opacity:.55}
+  .glow-2{width:520px;height:520px;right:-140px;bottom:-260px;background:#4c6ef5;opacity:.22}
+  canvas{position:absolute;inset:0}
+  .content{position:absolute;left:96px;top:0;height:630px;display:flex;flex-direction:column;justify-content:center;gap:34px}
+  h1{margin:0;font-size:70px;font-weight:800;line-height:1.1;color:#f2f4fd;letter-spacing:-.01em;max-width:760px}
+  h1 em{font-style:normal;color:#7b93ff}
+  p{margin:0;font-size:28px;font-weight:400;color:#9aa6c9}
+  .url{position:absolute;right:96px;bottom:52px;font-size:22px;font-weight:500;color:#7b93ff;display:flex;align-items:center;gap:12px}
+  .url::before{content:"";width:10px;height:10px;border-radius:50%;background:#4c6ef5;box-shadow:0 0 18px 4px rgba(76,110,245,.7)}
+</style></head><body>
+<div class="glow glow-1"></div><div class="glow glow-2"></div>
+<canvas id="c" width="1200" height="630"></canvas>
+<div class="content">
+  <div class="logo"><!-- LOGO --></div>
+  <h1>Software que <em>impulsa</em> tu negocio</h1>
+  <p>Diseñamos y desarrollamos software y flujos de IA a medida</p>
+</div>
+<div class="url">javcho.com</div>
+<script>
+// Misma logica que src/components/GlobalParticles.jsx, con RNG con seed
+// para que la imagen sea reproducible.
+const PARTICLE_COLORS = ["76, 110, 245", "202, 220, 252", "30, 39, 97"]
+const LINK_DISTANCE = 130, MAX_PARTICLES = 220, DENSITY = 6000
+let seed = 20260913
+const rand = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296 }
+const W = 1200, H = 630
+const ctx = document.getElementById("c").getContext("2d")
+const count = Math.min(MAX_PARTICLES, Math.floor((W * H) / DENSITY))
+const particles = []
+for (let i = 0; i < count; i++) particles.push({ x: rand() * W, y: rand() * H, r: 1 + rand() * 1.8, color: PARTICLE_COLORS[i % PARTICLE_COLORS.length] })
+// "Cursor" fijo sobre la zona derecha para reproducir el halo del sitio.
+const mouse = { x: 900, y: 300 }, MOUSE_RADIUS = 160
+const glow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, MOUSE_RADIUS * 1.4)
+glow.addColorStop(0, "rgba(76, 110, 245, 0.3)"); glow.addColorStop(1, "rgba(76, 110, 245, 0)")
+ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(mouse.x, mouse.y, MOUSE_RADIUS * 1.4, 0, Math.PI * 2); ctx.fill()
+for (let i = 0; i < particles.length; i++) {
+  const p = particles[i]
+  const dx = p.x - mouse.x, dy = p.y - mouse.y, dist = Math.hypot(dx, dy)
+  let radius = p.r, opacity = 0.5
+  if (dist < MOUSE_RADIUS) { const f = (MOUSE_RADIUS - dist) / MOUSE_RADIUS; radius = p.r + f * 2; opacity = 0.5 + f * 0.5 }
+  ctx.beginPath(); ctx.arc(p.x, p.y, radius, 0, Math.PI * 2); ctx.fillStyle = "rgba(" + p.color + ", " + opacity + ")"; ctx.fill()
+  for (let j = i + 1; j < particles.length; j++) {
+    const q = particles[j], d = Math.hypot(p.x - q.x, p.y - q.y)
+    if (d < LINK_DISTANCE) {
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y)
+      ctx.strokeStyle = "rgba(202, 220, 252, " + 0.12 * (1 - d / LINK_DISTANCE) + ")"; ctx.lineWidth = 1; ctx.stroke()
+    }
+  }
+}
+</script>
+</body></html>

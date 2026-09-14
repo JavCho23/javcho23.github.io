@@ -5,6 +5,10 @@ import { Building2, House, ShoppingCart  } from "lucide-react"
 
 import WorkItem from "../components/WorkItem"
 
+import inboxImg from "../assets/img/work/inbox.png"
+import gerenciaGestarImg from "../assets/img/work/gerencia-gestar.png"
+import buscapatasImg from "../assets/img/work/buscapatas.png"
+
 const works = [
     {
         name: "Alegra",
@@ -37,7 +41,7 @@ const works = [
     {
         name: "Ticker",
         tag: "Proyecto freelance",
-        image: "/assets/img/work/inbox.png",
+        image: inboxImg,
         link: "https://beexcc.com/conversations-v2",
         stack: ["Chatbot", "Cobro self-service"],
         description:
@@ -46,7 +50,7 @@ const works = [
     {
         name: "GerenciaGestar",
         tag: "Proyecto freelance",
-        image: "/assets/img/work/gerencia-gestar.png",
+        image: gerenciaGestarImg,
         link: "#",
         stack: ["Integración ERP", "Reportes"],
         description:
@@ -55,7 +59,7 @@ const works = [
     {
         name: "Buscapatas",
         tag: "Proyecto anterior",
-        image: "/assets/img/work/buscapatas.png",
+        image: buscapatasImg,
         link: "http://www.buscapatas.org",
         stack: ["AWS Lambda", "API Gateway", "S3"],
         description:
