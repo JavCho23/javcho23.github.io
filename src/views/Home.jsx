@@ -26,10 +26,6 @@ function Home() {
 
                 <div className="home__content">
                     <img className="home__logo" src={logo} alt="{ Jav }" />
-                    <p className="home__eyebrow">
-                        Gerencia de Ingeniería · Desarrollo de software ·
-                        Certificados en AWS como Cloud Solutions Architect
-                    </p>
                     <h1 className="home__title">
                         Software que impulsa tu negocio
                     </h1>

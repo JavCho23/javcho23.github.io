@@ -1,7 +1,7 @@
 import "../assets/css/Work.css"
 import "../assets/css/View.css"
 
-import { Building2, House } from "lucide-react"
+import { Building2, House, ShoppingCart  } from "lucide-react"
 
 import WorkItem from "../components/WorkItem"
 
@@ -18,12 +18,21 @@ const works = [
     },
     {
         name: "HolaDepa",
-        tag: "Proyecto freelance",
+        tag: "CTO",
         icon: House,
-        link: "#",
+        link: "https://holadepa.pe",
         stack: ["Web app", "Simulador de crédito"],
         description:
             "HolaDepa evalúa departamentos en Lima con más de 20 criterios objetivos, para que inversionistas y compradores decidan con datos y no solo con intuición. Construimos y pusimos en marcha la plataforma completa, incluido el simulador de crédito hipotecario, en menos de un mes.",
+    },
+    {
+        name: "Perlas y Diamantes",
+        tag: "Tienda online",
+        icon: ShoppingCart,
+        link: "#",
+        stack: ["Web app", "E-commerce"],
+        description:
+            "Perlas y Diamantes es una tienda online que ofrece una amplia selección de joyas y accesorios. Desarrollamos la plataforma completa, incluyendo el sistema de gestión de inventario y el proceso de compra con confirmación por WhatsApp.",
     },
     {
         name: "Ticker",
@@ -51,15 +60,6 @@ const works = [
         stack: ["AWS Lambda", "API Gateway", "S3"],
         description:
             "Plataforma de adopción y donación para el banco de alimentos y mascotas del Perú. Lideramos el equipo de backend, construyendo una API REST sobre servicios de AWS.",
-    },
-    {
-        name: "SecuritecMusic",
-        tag: "Proyecto anterior",
-        image: "/assets/img/work/securitec-music.png",
-        link: "https://securitec-music.herokuapp.com",
-        stack: ["Express.js", "MySQL", "Arquitectura hexagonal"],
-        description:
-            "API REST para administrar artistas, álbumes y canciones, con una arquitectura hexagonal sobre Express.js y MySQL.",
     },
 ]
 

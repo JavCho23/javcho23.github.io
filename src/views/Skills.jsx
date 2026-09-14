@@ -9,7 +9,7 @@ const skills = [
         img: "js",
         scene: "code",
         name: "Fullstack development",
-        tags: ["JavaScript", "Node.js", "Microservicios", "Event-driven"],
+        tags: ["Microservicios", "Event-driven", "Alta disponibilidad"],
         descriptions: [
             "Tenemos conocimientos avanzados para el frontend y backend, especialmente en JavaScript.",
             "Nos especializamos en construir microservicios orientados a eventos y que soportan un tráfico alto, habiéndonos enfrentado a grandes desafíos en el manejo de tráfico y alta disponibilidad.",
@@ -19,20 +19,20 @@ const skills = [
         img: "mysql",
         scene: "data",
         name: "Databases",
-        tags: ["MySQL", "MongoDB", "Diseño de datos", "Alta disponibilidad"],
+        tags: ["PostgreSQL", "MySQL", "NeonDB" , "NoSQL", "Diseño de datos"],
         descriptions: [
-            "En la mayoría de proyectos en los que hemos trabajado, nos hemos encargado del diseño y administración de la base de datos, trabajando principalmente con MySQL.",
-            "Tenemos conocimientos para administrar bases de datos relacionales como MySQL y no relacionales como MongoDB, su autoescalado y alta disponibilidad.",
+            "Nos hemos encargado del diseño y administración de la base de datos, trabajando principalmente con PostgreSQL y opciones en la nube.",
+            "Tenemos conocimientos para administrar bases de datos relacionales como PostgreSQL y no relacionales como MongoDB, su autoescalado y alta disponibilidad.",
         ],
     },
     {
         img: "aws",
         scene: "cloud",
         name: "Cloud services",
-        tags: ["Lambda", "API Gateway", "CloudFormation", "AWS Certified"],
+        tags: [ "AWS Certified", "Serverless", "GCP", "Vercel"],
         descriptions: [
-            "La infraestructura a demanda y auto-escalable es el futuro. Hemos desarrollado microservicios con infraestructura serverless usando Lambda, API Gateway y CloudFormation.",
-            "Estamos certificados en AWS como Cloud Solutions Architect, con más de 4 años de experiencia en infraestructura como código y servicios de AWS.",
+            "La infraestructura a demanda y auto-escalable es el futuro y estamos alineados con ello. Hemos desarrollado microservicios con infraestructura serverless usando Lambda, API Gateway y CloudFormation.",
+            "Estamos certificados en AWS como Cloud Solutions Architect, con más de 4 años de experiencia en infraestructura como código y servicios en la nube.",
         ],
     },
 ]

@@ -54,7 +54,7 @@ function About() {
                     <div className="about__content">
                         <span className="about__kicker">Javier Chávez</span>
                         <h3 className="about__title">
-                            Al frente del proyecto · Gerente de Ingeniería
+                            Liderando el proyecto
                         </h3>
 
                         <ul className="about__tags">
@@ -66,11 +66,10 @@ function About() {
                         </ul>
 
                         <p className="about__description">
-                            Soy Javier y estoy al frente de este proyecto.
-                            Desarrollador de <strong>software</strong> peruano,
+                            Ingeniero en computación, desarrollador de <strong>software</strong> peruano,
                             autodidacta y con una fuerte habilidad de
                             pensamiento lógico. He liderado equipos de
-                            desarrollo construyendo productos de alta calidad,
+                            desarrollo construyendo productos de <strong>alta calidad</strong>,
                             disponibles y escalables que soportan la demanda de
                             negocios reales.
                         </p>
@@ -90,12 +89,11 @@ function About() {
                             <strong>
                                 AWS Certified Cloud Solutions Architect
                             </strong>
-                            . Traigo ese mismo nivel de exigencia a cada
-                            proyecto que entregamos: defino la dirección técnica,
-                            superviso cada entrega y, además de mis
-                            conocimientos técnicos, aporto una fuerte habilidad
-                            para la gestión de proyectos y la toma de
-                            decisiones.
+                            .
+                        </p>
+                        <p className="about__description">
+                            Javier trae ese mismo nivel de <strong>exigencia</strong> a cada
+                            proyecto que trabajamos, asegurando el más alto nivel de <strong>calidad</strong> y confiabilidad en nuestros productos.
                         </p>
 
                         <div className="about__social">
@@ -106,7 +104,7 @@ function About() {
                                 rel="noreferrer"
                             >
                                 <img src={linkedinIcon} alt="" />
-                                Conóceme en LinkedIn
+                                Conócelo en LinkedIn
                             </a>
                             <a
                                 href="https://github.com/javcho23"
@@ -115,7 +113,7 @@ function About() {
                                 rel="noreferrer"
                             >
                                 <img src={githubIcon} alt="" />
-                                Mis proyectos en GitHub
+                                Nuestros proyectos en GitHub
                             </a>
                         </div>
                     </div>
